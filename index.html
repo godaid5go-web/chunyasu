@@ -753,8 +753,8 @@ const BOSS_BGM_PRE={'zb_':'shitenno'};
 const FORCE_BGM={myarinbo:'myarinbo',zmyarinbo:'myarinbo'};
 const BGM_BOSSDEF='boss', BGM_LPF=650, BGM_FADE=.8;
 /* おんりょう だんかい：0=OFF */
-const BGM_LV=[0,.1,.2,.3,.45],BGM_LVN=['OFF','1','2','3','4'];
-let BGMLV=3;try{const v=localStorage.getItem('chunyasu_bgmlv2');if(v!=null&&BGM_LV[+v]!=null)BGMLV=+v}catch(e){}
+const BGM_LV=[0,.035,.065,.1,.15],BGM_LVN=['OFF','1','2','3','4'];
+let BGMLV=3;try{const v=localStorage.getItem('chunyasu_bgmlv3');if(v!=null&&BGM_LV[+v]!=null)BGMLV=+v}catch(e){}
 const BGM_VOLF=()=>BGM_LV[BGMLV];let BGMON=BGMLV>0;
 const BGM={cur:null,lp:false,el:{},url:{},lastT:0,lpf:null,mg:null};
 const BGM_WA=location.protocol!=='file:'||!!window.BGM_EMB;
@@ -3329,7 +3329,7 @@ async function openMenu(){if(lock||scene!=='field'||mv)return;lock=true;held=key
   else if(a==='export')await exportSave();
   else if(a==='import'){const p=await importSave();if(p){closeOv();lock=false;resumeFrom(p);await ovMsg(`${p.name} Lv${p.lv}の ぼうけんを よみこみました。`);return}}
   else if(a==='snd')SOUND=!SOUND;
-  else if(a==='bgm'){BGMLV=(BGMLV+1)%BGM_LV.length;BGMON=BGMLV>0;try{localStorage.setItem('chunyasu_bgmlv2',String(BGMLV))}catch(e){}}
+  else if(a==='bgm'){BGMLV=(BGMLV+1)%BGM_LV.length;BGMON=BGMLV>0;try{localStorage.setItem('chunyasu_bgmlv3',String(BGMLV))}catch(e){}}
   else if(a==='dbg')await debugMenu();
   else break;}
  closeOv();lock=false;updHud();}
