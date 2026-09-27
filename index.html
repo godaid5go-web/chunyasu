@@ -751,12 +751,15 @@ const BOSS_BGM={admiralP:'admiral',admiral:'admiral',brokingb:'admiral',bakapan:
 const BOSS_BGM_PRE={'zb_':'shitenno'};
 /* この てきが いたら かならず この きょく（ざこでも） */
 const FORCE_BGM={myarinbo:'myarinbo',zmyarinbo:'myarinbo'};
-const BGM_BOSSDEF='boss', BGM_VOL=.55, BGM_LPF=650, BGM_FADE=.8;
-let BGMON=true;try{BGMON=localStorage.getItem('chunyasu_bgm')!=='0'}catch(e){}
+const BGM_BOSSDEF='boss', BGM_LPF=650, BGM_FADE=.8;
+/* おんりょう だんかい：0=OFF */
+const BGM_LV=[0,.1,.2,.32,.5],BGM_LVN=['OFF','1','2','3','4'];
+let BGMLV=2;try{const v=localStorage.getItem('chunyasu_bgmlv');if(v!=null&&BGM_LV[+v]!=null)BGMLV=+v;else if(localStorage.getItem('chunyasu_bgm')==='0')BGMLV=0}catch(e){}
+const BGM_VOLF=()=>BGM_LV[BGMLV];let BGMON=BGMLV>0;
 const BGM={cur:null,lp:false,el:{},url:{},lastT:0,lpf:null,mg:null};
 const BGM_WA=location.protocol!=='file:'||!!window.BGM_EMB;
 function bgmSrc(id){const E=window.BGM_EMB;if(E&&(E[id]||BGM.url[id])){if(!BGM.url[id]){const b=atob(E[id]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);BGM.url[id]=URL.createObjectURL(new Blob([u],{type:'audio/mp4'}));E[id]=null}return BGM.url[id]}return 'bgm/'+id+'.m4a'}
-function bgmChain(){const a=ac();if(!a)return null;if(!BGM.lpf){const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=20000;f.Q.value=.5;const g=a.createGain();g.gain.value=BGM_VOL;f.connect(g);g.connect(a.destination);BGM.lpf=f;BGM.mg=g}return a}
+function bgmChain(){const a=ac();if(!a)return null;if(!BGM.lpf){const f=a.createBiquadFilter();f.type='lowpass';f.frequency.value=20000;f.Q.value=.5;const g=a.createGain();g.gain.value=BGM_VOLF();f.connect(g);g.connect(a.destination);BGM.lpf=f;BGM.mg=g}return a}
 function bgmEl(id){let e=BGM.el[id];if(e)return e;e=new Audio();e.loop=true;e.preload='auto';e.src=bgmSrc(id);e._v=0;e._tv=0;BGM.el[id]=e;
  const a=BGM_WA&&bgmChain();if(a){try{const s=a.createMediaElementSource(e),g=a.createGain();g.gain.value=0;s.connect(g);g.connect(BGM.lpf);e._g=g}catch(_){}}
  if(!e._g)e.volume=0;e.addEventListener('error',()=>{e._bad=1});return e}
@@ -772,10 +775,11 @@ function bgmWant(){if(!BGMON)return [null,false];
 function bgmTick(t){const dt=Math.min(.25,(t-(BGM.lastT||t))/1000);BGM.lastT=t;
  const [id,lp]=bgmWant();
  if(id!==BGM.cur){BGM.cur=id;for(const k in BGM.el)BGM.el[k]._tv=0;if(id&&BGM_FILES[id]){const e=bgmEl(id);if(!e._bad){if(e._v<=.001){try{e.currentTime=0}catch(_){}}e._tv=1;const p=e.play();if(p&&p.catch)p.catch(()=>{})}}}
- if(lp!==BGM.lp){BGM.lp=lp;if(BGM.lpf){const a=ac();BGM.lpf.frequency.setTargetAtTime(lp?BGM_LPF:20000,a.currentTime,.12);BGM.mg.gain.setTargetAtTime(BGM_VOL*(lp?.85:1),a.currentTime,.12)}}
+ if(lp!==BGM.lp){BGM.lp=lp;if(BGM.lpf){const a=ac();BGM.lpf.frequency.setTargetAtTime(lp?BGM_LPF:20000,a.currentTime,.12);BGM.mg.gain.setTargetAtTime(BGM_VOLF()*(lp?.85:1),a.currentTime,.12)}}
+ if(BGM.mg&&BGM._vl!==BGMLV){BGM._vl=BGMLV;BGM.mg.gain.setTargetAtTime(BGM_VOLF()*(BGM.lp?.85:1),ac().currentTime,.05)}
  for(const k in BGM.el){const e=BGM.el[k];if(e._v===e._tv&&(e._v===0?e.paused:true))continue;
   const st=dt/BGM_FADE;e._v=e._tv>e._v?Math.min(e._tv,e._v+st):Math.max(e._tv,e._v-st);
-  if(e._g)e._g.gain.value=e._v;else e.volume=Math.max(0,Math.min(1,e._v*BGM_VOL*(BGM.lp?.45:1)));
+  if(e._g)e._g.gain.value=e._v;else e.volume=Math.max(0,Math.min(1,e._v*BGM_VOLF()*(BGM.lp?.45:1)));
   if(e._v===0&&e._tv===0&&!e.paused)e.pause();}}
 function bgmKick(){ac();const e=BGM.cur&&BGM.el[BGM.cur];if(e&&e.paused&&!document.hidden){const p=e.play();if(p&&p.catch)p.catch(()=>{})}}
 ['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,bgmKick,{capture:true,passive:true}));
@@ -3314,7 +3318,7 @@ function goalText(){const f=PL.flags,c=k=>Object.keys(f).filter(x=>x.startsWith(
 async function openMenu(){if(lock||scene!=='field'||mv)return;lock=true;held=keyHeld=null;sfx('ok');
  for(;;){
   openOv(`<div class="menu"><div class="win mstat"><img class="port" alt="" src="${sprURL(HERO.down[0],'hd0')}"><div><p>${esc(PL.name)}</p><p>Lv ${PL.lv}</p><p>HP ${PL.hp}/${PL.max}</p><p>こうげき ${effAtk()}${lvBonus()?`<span class="gold"> +${lvBonus()}%</span>`:''}</p><p>ぼうぎょ ${effDef()}</p><p class="dim">つぎのLvまで ${need(PL.lv)-PL.xp}</p><p class="dim">デッキ ${PL.deck.length}まい</p></div></div>
-   <div class="win mcmd opts"><button class="opt" data-a="item">アイテム</button>${PL.flags.ft?'<button class="opt" data-a="warp">ワープ</button>':''}<button class="opt" data-a="deck">デッキ</button><button class="opt" data-a="equip">そうび</button><button class="opt" data-a="save">セーブ</button><button class="opt" data-a="export">かきだす</button><button class="opt" data-a="import">よみこむ</button><button class="opt" data-a="bgm">BGM ${BGMON?'ON':'OFF'}</button><button class="opt" data-a="snd">こうかおん ${SOUND?'ON':'OFF'}</button>${PL.debug?'<button class="opt" data-a="dbg">デバッグ</button>':''}<button class="opt" data-a="close">とじる</button></div>
+   <div class="win mcmd opts"><button class="opt" data-a="item">アイテム</button>${PL.flags.ft?'<button class="opt" data-a="warp">ワープ</button>':''}<button class="opt" data-a="deck">デッキ</button><button class="opt" data-a="equip">そうび</button><button class="opt" data-a="save">セーブ</button><button class="opt" data-a="export">かきだす</button><button class="opt" data-a="import">よみこむ</button><button class="opt" data-a="bgm">BGM ${BGM_LVN[BGMLV]}</button><button class="opt" data-a="snd">こうかおん ${SOUND?'ON':'OFF'}</button>${PL.debug?'<button class="opt" data-a="dbg">デバッグ</button>':''}<button class="opt" data-a="close">とじる</button></div>
    <div class="win mgil">${PL.dz} ${CUR}</div><div class="win mgoal"><span class="gold">もくひょう</span>　${goalText()}</div></div>`);
   const a=await new Promise(res=>ov.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{sfx('cur');res(b.dataset.a)}));
   if(a==='deck')await showDeck();
@@ -3325,7 +3329,7 @@ async function openMenu(){if(lock||scene!=='field'||mv)return;lock=true;held=key
   else if(a==='export')await exportSave();
   else if(a==='import'){const p=await importSave();if(p){closeOv();lock=false;resumeFrom(p);await ovMsg(`${p.name} Lv${p.lv}の ぼうけんを よみこみました。`);return}}
   else if(a==='snd')SOUND=!SOUND;
-  else if(a==='bgm'){BGMON=!BGMON;try{localStorage.setItem('chunyasu_bgm',BGMON?'1':'0')}catch(e){}}
+  else if(a==='bgm'){BGMLV=(BGMLV+1)%BGM_LV.length;BGMON=BGMLV>0;try{localStorage.setItem('chunyasu_bgmlv',String(BGMLV))}catch(e){}}
   else if(a==='dbg')await debugMenu();
   else break;}
  closeOv();lock=false;updHud();}
