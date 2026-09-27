@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>チュンヤスファンタジー</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,9 @@
   --bg:#000; color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
+html,body{height:100%;touch-action:manipulation}
+button,.opt,#bHand,#bHand *{touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#bHand .q{outline:2px dashed #f8d048;outline-offset:-3px;opacity:.75}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'DotGothic16','Hiragino Kaku Gothic ProN','Yu Gothic',monospace;font-size:15px;padding-inline:16px;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 #game{max-width:460px;margin:0 auto;padding-block:12px 24px;display:flex;flex-direction:column;gap:8px;position:relative;min-height:100%}
 #screen{display:block;width:100%;height:auto;aspect-ratio:256/176;image-rendering:pixelated;background:#000;touch-action:manipulation}
@@ -753,8 +755,8 @@ const BOSS_BGM_PRE={'zb_':'shitenno'};
 const FORCE_BGM={myarinbo:'myarinbo',zmyarinbo:'myarinbo'};
 const BGM_BOSSDEF='boss', BGM_LPF=650, BGM_FADE=.8;
 /* おんりょう だんかい：0=OFF */
-const BGM_LV=[0,.035,.065,.1,.15],BGM_LVN=['OFF','1','2','3','4'];
-let BGMLV=3;try{const v=localStorage.getItem('chunyasu_bgmlv3');if(v!=null&&BGM_LV[+v]!=null)BGMLV=+v}catch(e){}
+const BGM_LV=[0,.018,.033,.05,.075],BGM_LVN=['OFF','1','2','3','4'];
+let BGMLV=3;try{const v=localStorage.getItem('chunyasu_bgmlv4');if(v!=null&&BGM_LV[+v]!=null)BGMLV=+v}catch(e){}
 const BGM_VOLF=()=>BGM_LV[BGMLV];let BGMON=BGMLV>0;
 const BGM={cur:null,lp:false,el:{},url:{},lastT:0,lpf:null,mg:null};
 const BGM_WA=location.protocol!=='file:'||!!window.BGM_EMB;
@@ -783,6 +785,8 @@ function bgmTick(t){const dt=Math.min(.25,(t-(BGM.lastT||t))/1000);BGM.lastT=t;
   if(e._v===0&&e._tv===0&&!e.paused)e.pause();}}
 function bgmKick(){ac();const e=BGM.cur&&BGM.el[BGM.cur];if(e&&e.paused&&!document.hidden){const p=e.play();if(p&&p.catch)p.catch(()=>{})}}
 ['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,bgmKick,{capture:true,passive:true}));
+{let lastTE=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTE<350&&!(e.target.closest&&e.target.closest('input,textarea'))){e.preventDefault();const t=e.target.closest&&e.target.closest('button,[data-i],[data-e],.opt');if(t)t.click()}lastTE=n},{passive:false});
+ ['gesturestart','gesturechange','dblclick'].forEach(k=>document.addEventListener(k,e=>e.preventDefault(),{passive:false}))}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const k in BGM.el)if(!BGM.el[k].paused)BGM.el[k].pause()}else bgmKick()});
 let MST=null;
 function mst(){const a=ac();if(!a)return null;if(MST)return MST;const g=a.createGain();g.gain.value=.9;const lp=a.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3000;lp.Q.value=.6;
@@ -3329,7 +3333,7 @@ async function openMenu(){if(lock||scene!=='field'||mv)return;lock=true;held=key
   else if(a==='export')await exportSave();
   else if(a==='import'){const p=await importSave();if(p){closeOv();lock=false;resumeFrom(p);await ovMsg(`${p.name} Lv${p.lv}の ぼうけんを よみこみました。`);return}}
   else if(a==='snd')SOUND=!SOUND;
-  else if(a==='bgm'){BGMLV=(BGMLV+1)%BGM_LV.length;BGMON=BGMLV>0;try{localStorage.setItem('chunyasu_bgmlv3',String(BGMLV))}catch(e){}}
+  else if(a==='bgm'){BGMLV=(BGMLV+1)%BGM_LV.length;BGMON=BGMLV>0;try{localStorage.setItem('chunyasu_bgmlv4',String(BGMLV))}catch(e){}}
   else if(a==='dbg')await debugMenu();
   else break;}
  closeOv();lock=false;updHud();}
@@ -3373,7 +3377,7 @@ function calcE0(base,e,h){let d=(B.fleeFail?Math.ceil(base*.3):0)+Math.round(bas
 function fxPos(t){if(inBattle()&&t===B.h)return[HX,HY-6];return[t.cx||HX,(t.cy||HY)-4]}
 function bigCheck(e){e.chg=null;if(B&&(B.multiNow||B.lose))return;const m=e.intent;if(!m||!m.dmg||!B||!B.h||e.dead)return;const h=m.hits||1;let tot;try{tot=calcE(m.dmg,e,h)*h}catch(_){return}
  const mx=B.h.max||PL.max;if(!((e.def.boss&&tot>=Math.max(30,mx*.3))||tot>=mx*.45))return;
- const lv=PL?PL.lv:5;const tier=STRCAP_EX.includes(e.id)||/^zb_|suikamar|jiiyaB/.test(e.id)?2:STRCAP_LATE.includes(e.id)?1:e.id==='admiral'?3:0;const sh=Math.round((8+lv*1.3)*(e.def.boss?[1.8,2.16,3.4,2.6][tier]:1.2));e.chg={need:e.def.boss?[4,5,6,5][tier]:3,h:0,sh,perCard:tier>0};e.block+=sh;
+ const lv=PL?PL.lv:5;const tier=STRCAP_EX.includes(e.id)||/^zb_|suikamar|jiiyaB/.test(e.id)?2:STRCAP_LATE.includes(e.id)?1:e.id==='admiral'?3:0;const early=['rainbow','sougetsu','usayorich'].includes(e.id);const sh=Math.round((8+lv*1.3)*(e.def.boss?(early?2.05:[1.8,2.16,3.4,2.6][tier]):1.2));e.chg={need:e.def.boss?(early?5:[4,5,6,5][tier]):3,h:0,sh,perCard:tier>0};e.block+=sh;
  try{popE(e,'ためている…！','#ff9a40');addFx('shield',...fxPos(e))}catch(_){} }
 function bigBreak(t){t.chg=null;t.intent={name:'ダウン',down:1};t.vuln=(t.vuln||0)+1;try{popE(t,'ブレイク！ ダウン！','#f8d048');const [px,py]=fxPos(t);addFx('burst',px,py);addFx('break',px,py);sfx('lv');B.flashCol={c:'#fff0a0',t0:now()};showName(t.name+'の おおわざを くずした！')}catch(_){} }
 function hit(t,d){const had=t.block,b=Math.min(t.block,d);t.block-=b;d-=b;t.hp=Math.max(0,t.hp-d);
@@ -3559,7 +3563,9 @@ function buildBattlePanel(){
  $('#bFlee').onclick=()=>{sfx('cur');fleeBattle()};
  {let lp=null,lpDone=false;const hb=$('#bHand');hb.addEventListener('pointerdown',ev=>{const b=ev.target.closest('[data-i]');if(!b)return;lpDone=false;clearTimeout(lp);lp=setTimeout(async()=>{lpDone=true;const c=B.hand[+b.dataset.i];if(c){sfx('cur');await cardDetail(c)}},450)});
  ['pointerup','pointerleave','pointercancel'].forEach(k=>hb.addEventListener(k,()=>clearTimeout(lp)));hb.addEventListener('contextmenu',e=>e.preventDefault());
- hb.onclick=ev=>{if(lpDone){lpDone=false;return}const b=ev.target.closest('[data-i]');if(b)handCard(+b.dataset.i)};}
+ hb.onclick=ev=>{if(lpDone){lpDone=false;return}const b=ev.target.closest('[data-i]');if(!b)return;const i=+b.dataset.i;
+  if(B&&scene==='battle'&&B.busy&&!B.enemyPhase){const c=B.hand[i];B.tq=B.tq||[];if(c&&!B.tq.includes(c)&&B.tq.length<6){B.tq.push(c);b.classList.add('q');sfx('cur')}return}
+  handCard(i)};}
  $('#bNames').onclick=ev=>{const b=ev.target.closest('[data-e]');if(!b)return;const e=B.enemies[+b.dataset.e];
   if(B.sel!==null&&!B.busy&&!e.dead){playCard(B.sel,e);return}
   hint(`${e.name}${e.def.fam?'（'+FAMJP[e.def.fam]+'けい）':''} HP${e.hp}/${e.max}　つぎ：${e.intent.name}〈${moveDesc(e.intent,e)}〉${e.vs?'（てきの なかまを ねらっている）':''}${e.def.gim?'　【'+e.def.gim+'】':''}`)};}
@@ -3578,7 +3584,7 @@ function renderBattleUI(){if(scene!=='battle'||!$('#bHand'))return;const h=B.h;
  const pct=Math.round(h.hp/h.max*100);
  $('#bStat').innerHTML=`<p>${esc(PL.name)} <span class="dim">Lv${PL.lv}</span></p><p>HP <span class="${pct<30?'red':''}">${h.hp}</span>/${h.max}</p><div class="bar ${pct<30?'low':''}"><i style="width:${pct}%"></i></div>
   <p>マナ <span class="en">${'◆'.repeat(Math.max(0,Math.min(B.energy,8)))}${'◇'.repeat(Math.max(0,(has('moonfang')?4:3)-B.energy))}</span>${B.energy>(has('moonfang')?4:3)?` <span class="gold">${B.energy}</span>`:''}</p>${h.nextBlock||h.nextEnergy?`<p class="dim" style="font-size:12px">つぎのターン ${h.nextBlock?'ブロック'+h.nextBlock:''} ${h.nextEnergy?'マナ+'+h.nextEnergy:''}</p>`:''}<p>${h.block?`<span class="cyan">ブロック${h.block}</span> `:''}${stTxt(h)}</p>`;
- $('#bHand').innerHTML=B.hand.map((c,i)=>cardHTML(c,{tag:'button',cost:effCost(c),attr:`data-i="${i}" aria-label="${cname(c)} マナ${effCost(c)} ${ctext(cp(c),false,c)}"`,cls:(playable(c)?'':'no ')+(B.sel===i?'sel':'')})).join('');
+ $('#bHand').innerHTML=B.hand.map((c,i)=>cardHTML(c,{tag:'button',cost:effCost(c),attr:`data-i="${i}" aria-label="${cname(c)} マナ${effCost(c)} ${ctext(cp(c),false,c)}"`,cls:(playable(c)?'':'no ')+(B.sel===i?'sel':'')+(B.tq&&B.tq.includes(c)?' q':'')})).join('');
  $('#bPiles').textContent=`やまふだ ${B.draw.length}　すてふだ ${B.discard.length}${B.exh.length?`　つかいきり ${B.exh.length}`:''}`;
  $('#bEnd').disabled=B.busy;const bi=$('#bItem');if(bi)bi.disabled=B.busy||!PL.items.length;const bf=$('#bFlee');if(bf)bf.disabled=B.busy;}
 function reshuffle(){if(!B.draw.length&&B.discard.length){B.draw=shuffle(B.discard);B.discard=[];if(has('sundial')){B.sund=(B.sund||0)+1;if(B.sund%3===0){B.energy+=2;popH('ひどけい マナ+2','#f8d048')}}}}
@@ -3694,7 +3700,9 @@ async function playCard(i,tgt){
  if(!alive().length)return victory();
  if(B.forceEndSelf){B.forceEndSelf=0;B.busy=false;renderBattleUI();return endTurn()}
  if(B.forceEnd){B.forceEnd=false;showName('したを ぬかれた！');hint('えんまちょう：したを ぬかれて ターンが おわる！');B.flashCol={c:'#ff4030',t0:now()};sfx('hurt');await wait(700);B.busy=false;return endTurn()}
- B.busy=false;renderBattleUI();}
+ B.busy=false;renderBattleUI();drainQ();}
+function drainQ(){setTimeout(()=>{if(!B||B.busy||B.enemyPhase||scene!=='battle'||!B.tq||!B.tq.length)return;if(B.sel!==null){B.tq=[];renderBattleUI();return}
+ const c=B.tq.shift(),i=B.hand.indexOf(c);if(i<0){drainQ();return}handCard(i);if(!B.busy){if(B.sel!==null||B.tq.length===0){B.tq=[];renderBattleUI()}else drainQ()}},16)}
 
 function discardOne(x){const i=B.hand.indexOf(x);if(i<0)return;B.hand.splice(i,1);B.discard.push(x);B.discarded=true;B.discN=(B.discN||0)+1;const q=cp(x);if(q.reflex)drawCards(q.reflex);if(q.tactic){B.energy+=q.tactic;popH('マナ+'+q.tactic,'#f8d048')}if(has('toughband')){B.h.block+=3;popH('+3','#7cd8ff')}if(has('kite')&&!B.kiteUsed){B.kiteUsed=1;B.energy++;popH('マナ+1','#f8d048')}}
 function onExhaust(){if(has('charon')&&alive().length)aoeRaw(3);if(has('horobi')){B.h.str++;popH('ちから+1','#f8d048')}const lx=B.exh[B.exh.length-1];if(lx&&cp(lx).sentinel){B.energy+=cp(lx).sentinel;popH('マナ+'+cp(lx).sentinel,'#f8d048')}if(B.h.darkEmb)drawCards(B.h.darkEmb);if(B.h.fnp){B.h.block+=B.h.fnp;popH('+'+B.h.fnp,'#7cd8ff')}if(has('deadbranch')&&B.hand.length<10){const x=tmpCard(pick(COMMONS.concat(UNCS)));B.hand.push(x);popH('かれえだ','#7cf07c')}}
@@ -3968,7 +3976,7 @@ async function battleItems(){if(!B||B.busy||scene!=='battle'||!PL.items.length)r
  if(!alive().length)return victory();
  B.busy=false;renderBattleUI();}
 function kill(e){if(e.dead)return;if(B&&B.h&&!e.dead){if(has('chinoshizuku')&&B.h.hp>0){const h=Math.min(2,B.h.max-B.h.hp);B.h.hp+=h}if(has('zbcore'))B.energy++}if(e.corpse&&B&&!e.def.rise){e.corpse=0;const v=e.max;for(const o of B.enemies){if(o===e||o.dead)continue;const r=hit(o,v);popHit(r,o.cx,o.cy-10);o.hitT=now();if(o.hp<=0)kill(o)}B.flashCol={c:'#b0ff80',t0:now()}}if(has('jinkinko')&&!(e.def.rise&&!e.risen)){PL.dz+=50;B.energy++;popH('+50ダイズ','#f8d048')}if(has('horn')&&!(e.def.rise&&!e.risen)&&B.enemies.filter(o=>!o.dead&&o!==e).length){B.energy++;drawCards(1);popH('ツノぶえ','#f8d048')}if(e.stolen&&e.stolen.length&&!e.def.rise){B.discard.push(...e.stolen);e.stolen=[];popH('カードが もどった！','#7cf07c')}if(e.loot){PL.dz+=e.loot*2;popE(e,`ダイズ ${e.loot*2} かえってきた！`,'#f8d048');e.loot=0}if(e.def.rise&&!e.risen){e.risen=true;e.hp=Math.round(e.max*e.def.rise);e.str=Math.min(strCap(e),e.str+3);e.poison=0;e.vuln=0;e.weak=0;popE(e,'よみがえった！','#c8f0e8');B.flashCol={c:'#c8f0e8',t0:now()};sfx('daizu');showName(e.name+'は よみがえった！');return}e.dead=true;e.deadT=now();B.killed.push(e);if(has('medal')&&B.h.hp>0){const h=Math.min(3,B.h.max-B.h.hp);if(h){B.h.hp+=h;pop(HX,HY+4,'+'+h,'#7cf07c')}}setTimeout(()=>sfx('die'),80)}
-async function endTurn(){if(!B||B.busy||scene!=='battle')return;B.busy=true;B.enemyPhase=true;B.sel=null;hint('');
+async function endTurn(){if(!B||B.busy||scene!=='battle')return;B.tq=[];B.busy=true;B.enemyPhase=true;B.sel=null;hint('');
  {const bn=B.hand.reduce((a,c)=>a+(cp(c).burn||0),0);if(bn){B.h.hp=Math.max(0,B.h.hp-bn);popH('-'+bn,'#f0f0e0');B.heroHit=now();sfx('hurt');renderBattleUI();await wait(350);if(B.h.hp<=0&&!tryRevive())return defeat()}}
  B.watch=has('watch')&&(B.tPlayed||0)<=3?3:0;if(has('orichalcum')&&!B.h.block){B.h.block+=6;popH('+6','#7cd8ff')}B.h.divine=0;
  if(B.h.retainN&&B.hand.length){for(let q=0;q<B.h.retainN;q++){const cand=B.hand.filter(x=>!x.keepT&&!cp(x).retain&&!cp(x).ethereal&&CARDS[x.id].t!=='st');if(!cand.length)break;const k=await choose('ねりに ねった さく：ほじ する カードを えらびますか？',['えらぶ','しない']);if(k!==0)break;const i=await pickFrom('ほじ する カードを えらんでください',cand);cand[i].keepT=1}}
