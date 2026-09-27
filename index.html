@@ -583,7 +583,7 @@ PIX.suikamar=paint(66,94,({px,ell,poly})=>{const G='#2e7a2a',Gd='#1a4a18',Gl='#4
  for(let y=4;y<22;y++)px(44+Math.sin(y)*1,y,'#d8d040');
  for(let i=0;i<30;i++)px(20+((i*37)%26),42+((i*23)%20),i%2?'#f8e0e0':'#3a1010')});
 for(const k in PIX)PIXW[k]=whiteOf(PIX[k]);
-setTimeout(()=>{portraitEnemy('pt_jiiya','jiiya',false);for(const k of ['kumiko','fshark','unicorn','fafa','kumada','shain','seirai'])if(PORTRAITS[k])portraitEnemy('pt_zb_'+k,k,true)},0);
+setTimeout(()=>{portraitEnemy('pt_jiiya','jiiya',false);for(const k of ['kumiko','fshark','unicorn','fafa','kumada','seirai'])if(PORTRAITS[k])portraitEnemy('pt_zb_'+k,k,true)},0);
 const PORTRAITS={};
 (function(){const N=48,c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');
  const px=(a,b,col)=>{x.fillStyle=col;x.fillRect(Math.round(a),Math.round(b),1,1)};
@@ -1093,7 +1093,7 @@ const CARDS={
  nesichunis:{name:'ネシトチュニス',t:'skl',g:'onisoi',b:{cost:1,nesi:10},u:{cost:0,nesi:10}},
  napakabu:{name:'ナパカブ',t:'skl',g:'onisoi',b:{cost:3,cleanse:1,strDouble:1,ex:1},u:{cost:2,cleanse:1,strDouble:1,ex:1}},
  ogiadurugan:{name:'オギアドゥルガン',t:'skl',g:'onisoi',b:{cost:0,draw:1,recallN:2},u:{cost:0,draw:2,recallN:2}},
- onisoisama:{name:'おにそいさま',t:'atk',g:'onisoi',b:{cost:3,fixed:9999},u:{cost:2,fixed:9999}},
+ onisoisama:{name:'おにそいさま',t:'atk',g:'onisoi',b:{cost:5,fixed:9999},u:{cost:4,fixed:9999}},
  kunai:{name:'くない',t:'atk',g:'token',b:{cost:0,dmg:4,ex:1},u:{cost:0,dmg:6,ex:1}},
  kega:{name:'けが',t:'st',g:'token',b:{cost:0,unplayable:1},u:{cost:0,unplayable:1}},
  karifura:{name:'カリフラー',t:'st',g:'token',b:{cost:0,unplayable:1,burn:2},u:{cost:0,unplayable:1,burn:2}},
@@ -1178,7 +1178,7 @@ for(const k of ['aoraji','aoraji2','kakure','dancer','kageraji'])if(EN[k])EN[k].
 for(const k of ['aoraji','aoraji2','kakure','dancer','kageraji','rainbow','tyranno','raptor','tricera','cheetah','ptera'])if(EN[k])EN[k].flip=1;
 {const up=(id,hk,dk,xk)=>{const e=EN[id];if(!e)return;e.hp=e.hp.map(v=>Math.round(v*hk));for(const mv of Object.values(e.moves)){if(mv.dmg)mv.dmg=Math.round(mv.dmg*dk);if(mv.block)mv.block=Math.round(mv.block*hk)}if(xk){e.xp=Math.round(e.xp*xk);e.dz=Math.round(e.dz*xk)}};
  up('chunis',3,2.2,2);up('daimaou',1.3,1.2,1.3);up('brokingb',1.3,1.2,1.3);if(EN.chunis)EN.chunis.gim=(EN.chunis.gim||'')+'（しんの ちから）';}
-{const X2={megane:{saimin:{name:'さいみん ビーム',addHand:'nemuke',n:2,weak:1,w:1}},bonesci:{shujutsu:{name:'きんきゅう しゅじゅつ',healAll:22,w:1}},zombie:{kansen:{name:'かんせん',addCard:'dokuke',n:3,w:1}},labshark:{shield:{name:'シールド てんかい',blockAll:16,w:1}},
+{const X2={megane:{saimin:{name:'さいみん ビーム',addHand:'nemuke',n:2,weak:1,w:1}},bonesci:{shujutsu:{name:'きんきゅう しゅじゅつ',healAll:22,w:1}},zombie:{kansen:{name:'かんせん',addCard:'dokuke',n:1,w:1}},labshark:{shield:{name:'シールド てんかい',blockAll:16,w:1}},
  karihei:{rappa:{name:'とつげき ラッパ',buffAll:3,w:1}},karishoko:{shiki:{name:'しきかんの ごうれい',buffAll:3,blockAll:10,w:1}},broheishi:{bouheki:{name:'ブロコリー ぼうへき',blockAll:20,w:1}},saru:{itazura:{name:'おさるの いたずら',addHand:'kega',n:2,w:1}},
  jzombie:{jigokubi:{name:'じごくの ひ',addHand:'yakedo',n:2,w:1}},jdaizu:{mame:{name:'まめ まきちらし',addCard:'kega',n:3,w:1}},yamioni:{yami:{name:'やみの のろい',addHand:'kyomu',n:2,drainE:1,w:1}},kageraji:{bunshin:{name:'かげぶんしん',blockAll:22,w:1}},
  onimusha:{gunpai:{name:'ぐんぱい',buffAll:4,blockAll:12,w:1}},tricera:{kabe:{name:'つのの かべ',blockAll:30,w:1}},plant:{houshi:{name:'どくほうし',addCard:'dokuke',n:4,poison:3,w:1}},cheetah:{aizu:{name:'かりの あいず',buffAll:3,w:1}},
@@ -1186,11 +1186,11 @@ for(const k of ['aoraji','aoraji2','kakure','dancer','kageraji','rainbow','tyran
  for(const [id,mv] of Object.entries(X2))if(EN[id]&&!EN[id].cycle)Object.assign(EN[id].moves,mv)}
 
 {const allB=['sougetsu','usayorich','admiral','awanizaru','bakapan','uranai','utsu','jin','gi','rei','chi','shin','shin2','chunis','daimaou','brokingb'];const mv={};let k=0;
- for(const id of allB){const e=EN[id];if(!e)continue;for(const [n,m] of Object.entries(e.moves)){if(m.summon||m.soul||m.flee||m.charge)continue;const c={...m};delete c.w;if(c.dmg)c.dmg=Math.round(c.dmg*1.35);if(c.block)c.block=Math.round(c.block*1.5);c.w=1;mv['m'+(k++)]=c}}
+ for(const id of allB){const e=EN[id];if(!e)continue;for(const [n,m] of Object.entries(e.moves)){if(m.summon||m.soul||m.flee||m.charge)continue;const c={...m};delete c.w;if(c.dmg)c.dmg=Math.round(c.dmg*2.6);if(c.block)c.block=Math.round(c.block*1.8);c.w=1;mv['m'+(k++)]=c}}
  EN.suikamar={name:'スイカマー',px:'suikamar',hp:[48000,48000],s:2,xp:30000,dz:99999,boss:1,clone:1,multi:3,aura:'255,60,80',shiftGim:1,halfStr:10,fam:'veg',gim:'ぼうりょくの おう：1ターンに 3かい こうどう。まいターン とくせいが かわる',drop:null,rate:0,eqGive:'suikanotane',eqMsg:'たねが ころがった……',moves:mv};}
 EN.jiiyaB={name:'ふくみみ サイクリングじいや',px:'pt_jiiya',hp:[1650,1650],s:2,xp:2500,dz:6000,boss:1,aura:'255,220,120',fam:'beast',gim:'かんしの め：スキルを つかうと ちから+1（1ターンに 1かい）',enrage:1,drop:null,rate:0,eqGive:'jiiyabell',eqMsg:'ベルが のこされた……チリン',
  cycle:['chirin','pedal','kanshi','cycle','kick'],moves:{chirin:{name:'チリン チリーン',dmg:17,hits:3,weak:2},pedal:{name:'ペダル キック',dmg:60},kanshi:{name:'かんしの め',addHand:'nemuke',n:2,vuln:2},cycle:{name:'ぜんりょく サイクリング',block:60,str:3},kick:{name:'ころす ためだよ',dmg:88}}};
-const ZB=[['kumiko','まがつ くみこ'],['fshark','まがつ ほのおの シャーク'],['unicorn','まがつ ユニユニコーン'],['fafa','まがつ ファファファファッくん'],['kumada','まがつ くまだささき'],['shain','まがつ しゃいん'],['seirai','まがつ せいらい']];
+const ZB=[['kumiko','まがつ くみこ'],['fshark','まがつ ほのおの シャーク'],['unicorn','まがつ ユニユニコーン'],['fafa','まがつ ファファファファッくん'],['kumada','まがつ くまだささき'],['seirai','まがつ せいらい']];
 const ZBMV=[{a:{name:'まがつ びーむ',dmg:32,hits:5},b:{name:'やみの はね',str:6,block:150},c:{name:'しんえんの やり',dmg:75,vuln:2}},{a:{name:'のろいの ことば',addHand:'kyomu',n:3,weak:2},b:{name:'まがつ ほむら',dmg:24,hits:4},c:{name:'ほろびの いちげき',dmg:90}},
  {a:{name:'まがつ かべ',blockAll:120,str:4},b:{name:'ねじれる ひかり',dmg:12,hits:9},c:{name:'たましい くらい',dmg:55,drainE:1,addCard:'dokuke',n:3}}];
 ZB.forEach(([k,nm],i)=>{EN['zb_'+k]={name:nm,px:'pt_zb_'+k,hp:[5200,5200],s:2,xp:3200,dz:9000,boss:1,aura:'200,60,255',fam:['undead','water','beast','oni','beast','veg','bird','undead'][i],gim:'まがつの ちから：よわい こうかを 3かいまで むこうに する',art:3,drop:null,rate:0,cycle:['a','b','c'],moves:JSON.parse(JSON.stringify(ZBMV[i%3]))}});
@@ -1578,7 +1578,7 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.conjure!=null)a.push(`「けしさる けん」（X${p.conjure?'+'+p.conjure:''}かい こうげき）を てふだへ`);
  if(p.xHits)a.push('つくった ときの Xの かずだけ くりかえす');
  if(p.omega)a.push(`ターンの おわりに てき ぜんたいに ${p.omega}ダメージ`);
- if(p.material)a.push('つかえない。ほのおの シャークに わたすと きょうか そざいに なる（HP+100／こうげき+20／ぼうぎょ+20）。くみこと カードの こうかんにも つかえる');
+ if(p.material)a.push('つかえない。ほのおの シャークに わたすと きょうか そざいに なる（HP+30／こうげき+7／ぼうぎょ+7）。くみこと カードの こうかんにも つかえる');
  if(p.nesi)a.push(`ターンを おわる。このとき てふだが ${p.nesi}まい いじょうなら もう1ターン`);
  if(p.cleanse)a.push('じぶんの わるい こうかを すべて けす');
  if(p.strDouble)a.push('まいターン ちからが 2ばいに なっていく');
@@ -2904,9 +2904,9 @@ async function kumikoTalk(){if(!PL.flags.kumiko){PL.flags.kumiko=true;await KUM(
   else{await KUM('カードには「どく」「れんげき」「ちから」「ぼうぎょ」「ドロー・マナ」の けいとうが あって、ばしょごとに でやすい けいとうが ちがうの。\nけんきゅうしせつは どく、ブロコリーせいは ちから、P国は れんげき……ってね。');await KUM('ドローで てふだを ふやして、0マナの カードを つなげると いっきに たたみかけられるわ。');await KUM('どくは ブロックを むしして ダメージが はいるし、よわきを かけると うける ダメージが へるの。');await KUM('カードを ながおし すると くわしい せつめいが みられるわよ！')}}}
 async function fsharkTalk(){await FSH('やっぱ シャーク さいこう ラジBAD');
  {const mg=PL.deck.concat(PL.bank).filter(c=>c.id==='magatsu');if(mg.length){const k0=await choose(`ほのおの シャーク「その まがまがしい かけら……！ ぼくに くれたら きみの ちからを ばくはつてきに のばせるよ。」\nまがつの かけら：${mg.length}まい`,['まがつの かけらを 1まい わたす','いまは いい'],'fshark');
-  if(k0===0){const st=await choose('どの ステータスを のばす？',['さいだいHP +100','こうげき +20','ぼうぎょ +20','やめる'],'fshark');if(st<=2){const x=mg[0];PL.deck=PL.deck.filter(c=>c!==x);PL.bank=PL.bank.filter(c=>c!==x);
-   if(st===0){PL.max+=100;PL.hp+=100}else if(st===1)PL.bonA=(PL.bonA||0)+20;else PL.bonD=(PL.bonD||0)+20;sfx('daizu');FX={type:'flash',t0:now()};await wait(300);FX=null;await FSH('うんめいの であい、かんじられたらと おもいます');
-   await ovMsg(`まがつの ちからが ながれこんできた！\n${['さいだいHP+100','こうげき+20','ぼうぎょ+20'][st]}`);saveGame()}return}}}
+  if(k0===0){const st=await choose('どの ステータスを のばす？',['さいだいHP +30','こうげき +7','ぼうぎょ +7','やめる'],'fshark');if(st<=2){const x=mg[0];PL.deck=PL.deck.filter(c=>c!==x);PL.bank=PL.bank.filter(c=>c!==x);
+   if(st===0){PL.max+=30;PL.hp+=30}else if(st===1)PL.bonA=(PL.bonA||0)+7;else PL.bonD=(PL.bonD||0)+7;sfx('daizu');FX={type:'flash',t0:now()};await wait(300);FX=null;await FSH('うんめいの であい、かんじられたらと おもいます');
+   await ovMsg(`まがつの ちからが ながれこんできた！\n${['さいだいHP+30','こうげき+7','ぼうぎょ+7'][st]}`);saveGame()}return}}}
  const k=await choose('ほのおの シャーク「カードを 1まい くれたら、きみの ステータスを のばしてあげるよ。\nレアな カードほど たくさん のびるんだ。」',['カードを わたす','はなしを きく','やめる'],'fshark');
  if(k===1){await FSH('うんめいの であい、かんじられたらと おもいます');await FSH('コモンは すこし、アンコモンは そこそこ、レアは ぐっと のびるよ。\nきたえた カードなら おまけつき。');return}if(k!==0)return;
  if(PL.deck.length<=5){await FSH('デッキが すくなすぎるよ。');return}
@@ -3325,13 +3325,13 @@ const BURST={sougetsu:22,usayorich:32,admiral:40,awanizaru:52,bakapan:64,uranai:
 function calcE(base,e,h){let r0=calcE0(base,e,h);if(PL)for(const id of PL.equip){const q=EQUIPS[id];if(q&&q.resist&&e.def.fam===q.resist[0])r0=Math.floor(r0*q.resist[1])}const cap=BURST[e.id];return cap?Math.min(r0,Math.floor(cap*1.1/Math.max(1,h||1))):r0}
 function calcE0(base,e,h){let d=(B.fleeFail?Math.ceil(base*.3):0)+Math.round(base*e.sc)+strPer(e,h)+(e.def.cauliPow?e.def.cauliPow*[...B.hand,...B.draw,...B.discard].filter(c=>c.id==='karifura').length:0)+(e.def.moon&&B.h.hp<e.hp?e.def.moon:0);if(e.weak>0)d=Math.floor(d*.75);if(B.h.vuln>0)d=Math.floor(d*1.5);return Math.max(0,d)}
 function fxPos(t){if(inBattle()&&t===B.h)return[HX,HY-6];return[t.cx||HX,(t.cy||HY)-4]}
-function bigCheck(e){e.chg=null;if(B&&B.multiNow)return;const m=e.intent;if(!m||!m.dmg||!B||!B.h||e.dead)return;const h=m.hits||1;let tot;try{tot=calcE(m.dmg,e,h)*h}catch(_){return}
+function bigCheck(e){e.chg=null;if(B&&(B.multiNow||B.lose))return;const m=e.intent;if(!m||!m.dmg||!B||!B.h||e.dead)return;const h=m.hits||1;let tot;try{tot=calcE(m.dmg,e,h)*h}catch(_){return}
  const mx=B.h.max||PL.max;if(!((e.def.boss&&tot>=Math.max(30,mx*.3))||tot>=mx*.45))return;
- const lv=PL?PL.lv:5;const sh=Math.round((8+lv*1.3)*(e.def.boss?1.8:1.2));e.chg={need:e.def.boss?4:3,h:0,sh};e.block+=sh;
+ const lv=PL?PL.lv:5;const tier=STRCAP_EX.includes(e.id)||/^zb_|suikamar|jiiyaB/.test(e.id)?2:STRCAP_LATE.includes(e.id)?1:e.id==='admiral'?3:0;const sh=Math.round((8+lv*1.3)*(e.def.boss?[1.8,2.16,3.4,2.6][tier]:1.2));e.chg={need:e.def.boss?[4,5,6,5][tier]:3,h:0,sh,perCard:tier>0};e.block+=sh;
  try{popE(e,'ためている…！','#ff9a40');addFx('shield',...fxPos(e))}catch(_){} }
 function bigBreak(t){t.chg=null;t.intent={name:'ダウン',down:1};t.vuln=(t.vuln||0)+1;try{popE(t,'ブレイク！ ダウン！','#f8d048');const [px,py]=fxPos(t);addFx('burst',px,py);addFx('break',px,py);sfx('lv');B.flashCol={c:'#fff0a0',t0:now()};showName(t.name+'の おおわざを くずした！')}catch(_){} }
 function hit(t,d){const had=t.block,b=Math.min(t.block,d);t.block-=b;d-=b;t.hp=Math.max(0,t.hp-d);
- if(t.chg&&B&&!B.enemyPhase&&t.hp>0&&(b>0||d>0)){t.chg.h++;if(t.block<=0||t.chg.h>=t.chg.need)setTimeout(()=>{if(t.chg&&!t.dead)bigBreak(t)},0)}if(inBattle()){const [px,py]=fxPos(t);if(had>0&&t.block===0&&d>0)addFx('break',px,py);else if(b>0&&d===0)addFx('shield',px,py);if(d>0)addFx('slash',px,py)}return{blocked:b,dmg:d}}
+ if(t.chg&&B&&!B.enemyPhase&&t.hp>0&&(b>0||d>0)&&!(t.chg.perCard&&t.chg.seq===B.cardSeq)){t.chg.seq=B.cardSeq;t.chg.h++;if(t.block<=0||t.chg.h>=t.chg.need)setTimeout(()=>{if(t.chg&&!t.dead)bigBreak(t)},0)}if(inBattle()){const [px,py]=fxPos(t);if(had>0&&t.block===0&&d>0)addFx('break',px,py);else if(b>0&&d===0)addFx('shield',px,py);if(d>0)addFx('slash',px,py)}return{blocked:b,dmg:d}}
 function pop(x,y,s,col){B.pops.push({x,y,s:String(s),col:col||'#fcfcfc',t0:now()});const tp={'#cf9cff':'bubble','#ffb060':'down','#ff7a6a':'crack','#f8d048':'up','#7cd8ff':'shield','#7cf07c':'heal','#88a0ff':'down'}[col];if(tp&&!/^\d+$/.test(String(s)))addFx(tp,x,y+8,col)}
 function addFx(type,x,y,col){if(!B)return;(B.fx=B.fx||[]).push({type,x,y,col:col||'#fff',t0:now()});if(B.fx.length>40)B.fx.shift()}
 function drawFx(t){if(!B||!B.fx)return;B.fx=B.fx.filter(f=>t-f.t0<700);
@@ -3483,7 +3483,7 @@ function moveDesc(m,e){if(!m)return'';const a=[];if(m.flee)return'にげよう�
  if(m.addCard)a.push(`「${CARDS[m.addCard].name}」を ${m.n||1}まい まぜる`);if(m.stealDz)a.push('ダイズを ぬすむ');return a.join('・')}
 function drawIntent(e,top){const m=e.intent;if(!m)return;const y=Math.max(8,top-11);let x=e.cx-10;
  if(m.down){txt('ダウン',e.cx,y+3,'#f8d048',8,'center');const T=now()/300;for(let i=0;i<3;i++){const a=T+i*2.09;ctx.fillStyle='#fff070';const sx=e.cx+Math.cos(a)*14,sy=y+12+Math.sin(a)*4;ctx.fillRect(Math.round(sx)-1,Math.round(sy),3,1);ctx.fillRect(Math.round(sx),Math.round(sy)-1,1,3)}return}
- if(e.chg){const k=.5+.5*Math.sin(now()/140);const left=e.chg.need-e.chg.h;const ty=Math.max(14,y-10);txt(`ため！ あと${left}ヒット`,e.cx,ty-7,`rgb(255,${120+Math.round(100*k)},60)`,7,'center');txt(`か ブロック${e.block}を けずりきれ`,e.cx,ty+1,'#9ad8ff',6,'center')}
+ if(e.chg){const k=.5+.5*Math.sin(now()/140);const left=e.chg.need-e.chg.h;}
  if(m.flee){txt('!?',e.cx,y+3,'#f8d048',10,'center');return}
  if(m.summon){txt('よぶ',e.cx,y+3,'#c890ff',8,'center');return}
  if(m.soul){txt('さばき',e.cx,y+3,'#fff8a0',8,'center');return}
@@ -3496,7 +3496,7 @@ function drawIntent(e,top){const m=e.intent;if(!m)return;const y=Math.max(8,top-
 function badge(x,y,label,col){ctx.font=`7px ${FONT}`;const w=Math.ceil(ctx.measureText(label).width)+5;ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(x-w/2,y-4,w,9);ctx.fillStyle=col;ctx.fillRect(x-w/2,y-4,2,9);txt(label,x+1,y+1,col,7,'center');return w}
 function drawHeroBadges(t){const h=B.h,st=[];if(h.poison)st.push(['どく'+h.poison,'#cf9cff']);if(h.weak)st.push(['よわき'+h.weak,'#ffb060']);if(h.vuln)st.push(['むぼうび'+h.vuln,'#ff7a6a']);const s=h.str+h.tstr;if(s)st.push(['ちから'+(s>0?'+':'')+s,'#f8d048']);if(h.dex)st.push(['みのこなし+'+h.dex,'#7cd8ff']);if(h.dodge)st.push(['かわす'+h.dodge,'#7cd8ff']);if(h.entangled)st.push(['からみ','#7cf07c']);if(B.fleeFail)st.push(['にげしっぱい','#ff7a6a']);if(h.intang)st.push(['ゆうれい'+h.intang,'#c8f0e8']);if(h.barricade)st.push(['バリケード','#7cd8ff']);if(h.corrupt)st.push(['だらく','#c890ff']);if(h.echoForm)st.push(['やまびこ','#f8d048']);if(h.jugg)st.push(['せんしゃ'+h.jugg,'#ff9a40']);if(h.rageT)st.push(['げきど'+h.rageT,'#ff7a6a']);if(h.flameB)st.push(['ほのお'+h.flameB,'#ff9a40']);if(h.divine)st.push(['かみ×3','#fff0a0']);if(h.dupAtk)st.push(['ダブル'+h.dupAtk,'#f8d048']);
  let y=HY+44;for(let i=0;i<st.length;i++){const [a,c]=st[i];badge(HX+((i%2)?20:-16),y+Math.floor(i/2)*11,a,c)}}
-function drawEBars(e,bot){const w=Math.min(40,e.size),x=Math.round(e.cx-w/2),y=Math.min(H-24,bot+3);
+function drawEBars(e,bot){const w=Math.min(40,e.size),x=Math.round(e.cx-w/2),y=Math.min(H-24,bot+3);if(e.chg&&!e.dead){const s2=`ため あと${e.chg.need-e.chg.h}${e.chg.perCard?'まい':'ヒット'}／ブロック${e.block}`;ctx.font=`7px ${FONT}`;const tw=Math.ceil(ctx.measureText(s2).width)+6;ctx.fillStyle='rgba(0,0,24,.78)';ctx.fillRect(Math.round(e.cx-tw/2),y-12,tw,9);ctx.fillStyle='#8890b8';ctx.fillRect(Math.round(e.cx-tw/2),y-12,tw,1);txt(s2,e.cx,y-7,'#e8e0c8',7,'center')}
  ctx.fillStyle='#401818';ctx.fillRect(x,y,w,3);ctx.fillStyle='#f83838';ctx.fillRect(x,y,Math.round(w*e.hp/e.max),3);
  txt(`${e.hp}/${e.max}`,e.cx,y+9,'#fcfcfc',7,'center');
  if(e.block>0){drawSpr(sprite('ishield',ICON.shield),x-11,y-3,1);txt(String(e.block),x-7,y+9,'#7cd8ff',7,'center')}
@@ -3678,7 +3678,7 @@ function tryRevive(){if(!B||B.lose)return false;
  if(has('tokage')&&!PL.flags.tokageUsed){PL.flags.tokageUsed=true;B.h.hp=Math.max(1,Math.floor(B.h.max*.5));B.flashCol={c:'#b0ffb0',t0:now()};popH('ふっかつ！','#7cf07c');showName('トカゲのしっぽ');sfx('heal');renderBattleUI();return true}
  return false}
 async function chooseHand(title,filter){const list=B.hand.filter(filter||(()=>true));if(!list.length)return null;const i=await pickFrom(title,list);return list[i]}
-async function resolveCard(c,tgt,opt){if(B)B.enemies.forEach(o=>o.mocked=false);
+async function resolveCard(c,tgt,opt){if(B){B.enemies.forEach(o=>o.mocked=false);B.cardSeq=(B.cardSeq||0)+1}
  const p=cp(c),d=CARDS[c.id],prev=B.lastType;
  showName(cname(c));sfx('card');
  if(p.hpCost&&!opt.echo){B.h.hp=Math.max(1,B.h.hp-p.hpCost);popH('-'+p.hpCost,'#ff7a6a');B.heroHit=now();B.hurtN=(B.hurtN||0)+1;if(B.h.rupture){B.h.str+=B.h.rupture;popH('ちから+'+B.h.rupture,'#f8d048')}}
@@ -3972,7 +3972,7 @@ async function enemyAct(e){const m=e.intent;showName(m.name);if(m.down){popE(e,'
  if(m.addHand){for(let q=0;q<(m.n||1)&&B.hand.length<10;q++)B.hand.push(tmpCard(m.addHand));popH(`てふだに「${CARDS[m.addHand].name}」×${m.n||1}`,'#f0f0e0');addFx('burst',HX,HY-6,'#f0f0e0')}
  if(m.blockAll){for(const o of alive()){const v=Math.round(m.blockAll*o.sc);o.block+=v;popE(o,'+'+v,'#7cd8ff')}sfx('block')}
  if(m.drainE){B.h.nextEnergy-=m.drainE;popH('マナ-'+m.drainE,'#88a0ff')}
- if(m.entangle){B.h.entangle=1;popH('からみついた！','#7cf07c')}
+ if(m.entangle){if((B.entCD||0)>B.turn)popH('ふりほどいた！','#fcfcfc');else{B.h.entangle=1;B.entCD=B.turn+2;popH('からみついた！','#7cf07c')}}
  if(m.healAll){for(const o of alive()){const h=Math.min(m.healAll,o.max-o.hp);if(h){o.hp+=h;popE(o,'+'+h,'#7cf07c')}}}
  if(m.buffAll){for(const o of alive()){const g=Math.max(0,Math.min(m.buffAll,strCap(o)-o.str));o.str+=g;popE(o,'ちから+'+g,'#f8d048')}}
  renderBattleUI();await wait(260);}
