@@ -749,7 +749,7 @@ const BGM_FILES={cave:'かいていどうくつ',awani:'アワニ湾',broco:'ブ
 /* マップ → きょく（かいていない マップは むおん：B3 S2 C1 HV3 HL0 OH） */
 const MAP_BGM={B1:'cave',B2:'cave',A1:'awani',S1:'awani',BT:'broco',BF:'broco',HV2:'broco',RV:'broco',L1:'lab',L2:'lab',HV1:'lab',PJ:'pkoku',PT:'pkoku',H1:'jigoku',H2:'jigoku',H3:'jigoku',NT:'ckoku',CP:'ckoku',OW:'oniw',Z:'zkoku',ZI:'zkoku'};
 /* ボス → きょく（かいていない ボスは BGM_BOSSDEF） */
-const BOSS_BGM={admiralP:'admiral',admiral:'admiral',brokingb:'admiral',bakapan:'pkoku',daimaou:'jigoku',utsu:'oniw',jin:'shitenno',gi:'shitenno',rei:'shitenno',chi:'shitenno',shin:'shin1',shin2:'shin2',suikamar:'suika'};
+const BOSS_BGM={admiralP:'admiral',admiral:'admiral',brokingb:'admiral',bakapan:'pkoku',bakapanEX:'pkoku',daimaou:'jigoku',utsu:'oniw',jin:'shitenno',gi:'shitenno',rei:'shitenno',chi:'shitenno',shin:'shin1',shin2:'shin2',suikamar:'suika'};
 const BOSS_BGM_PRE={'zb_':'shitenno'};
 /* この てきが いたら かならず この きょく（ざこでも） */
 const FORCE_BGM={myarinbo:'myarinbo',zmyarinbo:'myarinbo'};
@@ -785,7 +785,7 @@ function bgmTick(t){const dt=Math.min(.25,(t-(BGM.lastT||t))/1000);BGM.lastT=t;
   if(e._v===0&&e._tv===0&&!e.paused)e.pause();}}
 function bgmKick(){ac();const e=BGM.cur&&BGM.el[BGM.cur];if(e&&e.paused&&!document.hidden){const p=e.play();if(p&&p.catch)p.catch(()=>{})}}
 ['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,bgmKick,{capture:true,passive:true}));
-{let lastTE=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTE<350&&!(e.target.closest&&e.target.closest('input,textarea'))){e.preventDefault();const t=e.target.closest&&e.target.closest('button,[data-i],[data-e],.opt');if(t)t.click()}lastTE=n},{passive:false});
+{let lastTE=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-lastTE<350&&!(e.target.closest&&e.target.closest('input,textarea'))){e.preventDefault();const t=e.target&&(e.target.nodeType===1?e.target:e.target.parentElement);if(t&&t.click)t.click()}lastTE=n},{passive:false});
  ['gesturestart','gesturechange','dblclick'].forEach(k=>document.addEventListener(k,e=>e.preventDefault(),{passive:false}))}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){for(const k in BGM.el)if(!BGM.el[k].paused)BGM.el[k].pause()}else bgmKick()});
 let MST=null;
@@ -1170,7 +1170,7 @@ const EN={
  admiral:{fam:'veg',name:'カリフラーていとく',hp:[1700,1700],cauliPow:3,gim:'カリフラーか：たたかいの デッキの「カリフラー」1まいにつき こうげき+3',s:2,xp:450,dz:900,drop:'teitokuhou',rate:1,boss:1,aura:'240,240,220',cauli:1,startStr:3,cycle:['brobro','issei','gorei','nokoribi','jujika'],moves:{brobro:{name:'ブロブロほう',dmg:20,addCard:'karifura',n:2},issei:{name:'カリフラー いっせいしゃげき',dmg:13,hits:4},gorei:{name:'ていとくの ごうれい',str:6,block:55},nokoribi:{name:'ほのおの のこりび',dmg:9,hits:3,addCard:'karifura',n:1,weak:1},jujika:{name:'しろい じゅうじか',dmg:60,vuln:2}}},
  saru:{fam:'beast',name:'サル',hp:[60,70],s:2,xp:30,dz:20,drop:'sarumane',rate:.3,moves:{scratch:{name:'ひっかき',dmg:9,w:2},banana:{name:'バナナなげ',dmg:5,hits:2,w:1}}},
  awanizaru:{fam:'beast',name:'アワニザル',thorns:3,gimTag:'トゲ',gim:'アワニの けがわ：こうげきが あたるたび HP-3',hp:[750,750],s:2,xp:250,dz:500,boss:1,aura:'120,180,255',drop:'awaniawani',rate:1,cycle:['aw1','aw2','aw3'],moves:{aw1:{name:'アワニアワニアワニ',dmg:7,hits:4},aw2:{name:'アワニ……？',str:4,block:30},aw3:{name:'アワニッ！！',dmg:32,vuln:2}}},
- bakapan:{fam:'beast',name:'バカパン',enrage:2,gimTag:'怒',gim:'バカぢから：スキルを つかうと ちから+2（1ターンに 1かい）',hp:[1600,1600],s:2,xp:600,dz:1200,boss:1,aura:'255,80,60',drop:'bakapanchi',rate:1,cycle:['drum','punch','throw','roar'],moves:{drum:{name:'ドラミング',str:6,block:50},punch:{name:'バカパンチ',dmg:48},throw:{name:'なげとばし',dmg:13,hits:4},roar:{name:'いかりの さけび',dmg:20,weak:3,vuln:3}}},
+ bakapan:{fam:'beast',name:'バカパン',enrage:2,gimTag:'怒',gim:'バカぢから：スキルを つかうと ちから+2（1ターンに 1かい）',hp:[1600,1600],s:2,xp:600,dz:1200,boss:1,aura:'255,80,60',drop:'bakapanchi',rate:1,cycle:['drum','punch','throw','roar'],moves:{drum:{name:'ドラミング',str:6,block:50},punch:{name:'バカパンチ',dmg:54},throw:{name:'なげとばし',dmg:15,hits:4},roar:{name:'いかりの さけび',dmg:20,weak:3,vuln:3}}},
  jkoni:{fam:'oni',name:'じごくのコオニ',spr:'koni',hp:[80,90],s:3,xp:55,dz:35,drop:'kanabou',rate:.3,moves:{konbou:{name:'かなぼう',dmg:15,w:2},ikari:{name:'じごくの いかり',str:3,block:12,w:1}}},
  jdaizu:{fam:'veg',name:'もうじゃダイズ',spr:'daizuhei',hp:[60,70],s:3,xp:45,dz:30,drop:'jizou',rate:.3,moves:{mame:{name:'のろいの まめでっぽう',dmg:4,hits:3,w:2},kakure:{name:'さやに こもる',block:16,weak:1,w:1}}},
  jzombie:{fam:'undead',name:'じごくの もうじゃ',px:'jzombie',hp:[110,120],s:2,xp:70,dz:40,drop:'moujya',rate:.3,moves:{groan:{name:'うらみの こえ',block:18,weak:2,w:1},claw:{name:'じごくの つめ',dmg:20,w:2}}},
@@ -1195,11 +1195,11 @@ const EN={
  ptera:{fam:'bird',name:'プテラ',px:'ptera',hp:[400,440],s:2,xp:220,dz:260,evade:.15,drop:'bullettime',rate:.1,eqDrop:{id:'tokage',rate:.06},moves:{dive:{name:'きゅうこうか',dmg:45,w:2},scream:{name:'かなきりごえ',dmg:20,weak:2,w:1}}},
  cheetah:{fam:'beast',name:'チーター',px:'cheetah',hp:[780,840],s:2,xp:380,dz:500,evade:.1,drop:'burst',rate:.15,eqDrop:{id:'watch',rate:.08},moves:{tora1:{name:'トラです',dmg:30,hits:3,w:2},tora2:{name:'トラじゃないけど',str:8,block:60,w:1},tora3:{name:'ぼくは チーターなんだ',dmg:110,w:1}}},
  plant:{fam:'veg',name:'きょだい しょくちゅうそう',px:'plant',hp:[680,740],s:2,xp:320,dz:400,drop:'offering',rate:.15,eqDrop:{id:'icecream',rate:.06},moves:{eat:{name:'のみこむ',dmg:70,w:2},acid:{name:'ようかいえき',poison:12,weak:2,w:1},root:{name:'ねを はる',block:80,w:1}}},
- zmyarinbo:{fam:'bird',name:'ミャリンボ・Z',px:'zmyarinbo',hp:[10,10],s:2,xp:0,dz:500,drop:null,rate:0,evade:.85,flee:.45,xpLv:2.5,moves:{peck:{name:'つつく',dmg:8,w:1},look:{name:'きょろきょろ',charge:1,w:2}}},
+ zmyarinbo:{fam:'bird',name:'ミャリンボ・Z',px:'zmyarinbo',hp:[10,10],s:2,xp:0,dz:500,drop:null,rate:0,evade:.91,flee:.45,xpLv:2.5,moves:{peck:{name:'つつく',dmg:8,w:1},look:{name:'きょろきょろ',charge:1,w:2}}},
  chunis:{name:'ゆいいつしん チュニス',px:'chunis',hp:[5200,5200],s:2,xp:3000,dz:20000,boss:1,aura:'255,240,160',art:999,halfStr:12,gimTag:'神',drop:'apotheosis',rate:1,eqGive:'kaminohane',eqMsg:'かがやく はねが まいおちた…',gim:'ゆいいつしん：よわき・むぼうび・どくが きかない。たましいの さばき：HPの わりあいが チュニス いかだと さばかれる',cycle:['light','wing','soul','spear'],moves:{light:{name:'ひかりの さばき',dmg:32,hits:5},wing:{name:'てんしの つばさ',block:150,str:6},soul:{name:'たましいの さばき',soul:80},spear:{name:'ほしの やり',dmg:75,vuln:2}}},
  daimaou:{name:'だいまおう',px:'daimaou',hp:[3200,3200],s:2,xp:1500,dz:8000,boss:1,aura:'255,60,40',judge:10,drop:'mui',rate:1,eqGive:'enmashaku',eqMsg:'しゃくが のこされた…',gim:'えんまちょう：カードを 10まい つかうたびに したを ぬかれ、ターンが おわる',cycle:['shaku','jigoku','shita','ikari'],moves:{shaku:{name:'えんまの しゃく',dmg:40,hits:2},jigoku:{name:'じごくの ごうか',dmg:30,poison:10},shita:{name:'したを ぬくぞ',dmg:30,weak:3,vuln:2},ikari:{name:'だいまおうの いかり',str:8,block:120}}},
  brokingb:{name:'ブロコリー・ロイヤリー',px:'brokingb',hp:[3000,3000],s:2,xp:1500,dz:8000,boss:1,summoner:1,aura:'120,255,120',hitCap:60,drop:'teitokuhou',rate:1,eqGive:'royalbro',eqMsg:'おうかんの かけらが おちている…',gim:'おうの いげん：1かいの こうげきで うける ダメージは さいだい 60。このえへいを よぶ',cycle:['ondo','summon','scepter','decree'],moves:{ondo:{name:'ぱっぱらぴぃの おおおんど',str:6,block:80},summon:{name:'このえへい しゅうごう！',summon:['broheishi','broheishi']},scepter:{name:'おうしゃくの いちげき',dmg:55,vuln:2},decree:{name:'ブロコリー ちょくれい',dmg:18,hits:4}}},
- myarinbo:{fam:'bird',name:'ミャリンボ',hp:[6,6],s:2,xp:60,dz:40,drop:null,rate:0,evade:.82,flee:.5,xpLv:.45,moves:{peck:{name:'つつく',dmg:3,w:1},look:{name:'きょろきょろ',charge:1,w:2}}},
+ myarinbo:{fam:'bird',name:'ミャリンボ',hp:[6,6],s:2,xp:60,dz:40,drop:null,rate:0,evade:.87,flee:.5,xpLv:.45,moves:{peck:{name:'つつく',dmg:3,w:1},look:{name:'きょろきょろ',charge:1,w:2}}},
  sougetsu:{fam:'water',name:'そうげつのシャーク',gim:'つきの ちから：HPが じぶんより ひくい あいてへの こうげき+5',hp:[480,480],s:2,xp:120,dz:400,drop:'sougetsuzan',rate:1,boss:1,aura:1,moon:5,eqGive:'moonfang',eqMsg:'キバが のこされた…',cycle:['moonslash','current','tide','fang'],moves:{moonslash:{name:'そうげつざん',dmg:9,hits:3},current:{name:'くろしお',dmg:14,weak:2},tide:{name:'しおみちの かご',block:30,str:4},fang:{name:'げっこうの きば',dmg:28,vuln:2}}},
  megane:{fam:'beast',name:'やせいかメガネ',hp:[54,62],s:2,xp:26,dz:25,drop:'gyorogyoro',rate:.3,moves:{stare:{name:'ぎょろぎょろ',weak:2,vuln:1,w:1},leap:{name:'とびかかり',dmg:16,w:2}}},
  labshark:{fam:'water',name:'じっけんちゅうのシャーク',hp:[76,84],s:2,xp:32,dz:30,drop:'drillfang',rate:.3,moves:{drill:{name:'ドリルファング',dmg:9,hits:2,w:2},charge:{name:'じゅうでん',str:3,block:14,w:1}}},
@@ -1236,12 +1236,13 @@ for(const k of ['aoraji','aoraji2','kakure','dancer','kageraji','rainbow','tyran
 {const allB=['sougetsu','usayorich','admiral','awanizaru','bakapan','uranai','utsu','jin','gi','rei','chi','shin','shin2','chunis','daimaou','brokingb'];const mv={};let k=0;
  for(const id of allB){const e=EN[id];if(!e)continue;for(const [n,m] of Object.entries(e.moves)){if(m.summon||m.soul||m.flee||m.charge)continue;const c={...m};delete c.w;if(c.dmg)c.dmg=Math.round(c.dmg*2.6);if(c.block)c.block=Math.round(c.block*1.8);c.w=1;mv['m'+(k++)]=c}}
  EN.suikamar={name:'スイカマー',px:'suikamar',hp:[48000,48000],s:2,xp:30000,dz:99999,boss:1,clone:1,multi:3,aura:'255,60,80',shiftGim:1,halfStr:10,fam:'veg',gim:'ぼうりょくの おう：1ターンに 3かい こうどう。まいターン とくせいが かわる',drop:null,rate:0,eqGive:'suikanotane',eqMsg:'たねが ころがった……',moves:mv};}
+EN.bakapanEX={...EN.bakapan,name:'バカパン・しんのすがた',px:'bakapan',hp:[5000,5000],xp:3000,dz:15000,enrage:3,gim:'バカぢから・きわみ：スキルを つかうと ちから+3（1ターンに 1かい）',drop:'bakapanchi',rate:.5,moves:{drum:{name:'しんの ドラミング',str:8,block:150},punch:{name:'バカパンチ・きわみ',dmg:120},throw:{name:'ぶんなげ らんぶ',dmg:30,hits:4},roar:{name:'だいぜっきょう',dmg:45,weak:3,vuln:3}}};
 EN.jiiyaB={name:'ふくみみ サイクリングじいや',px:'pt_jiiya',hp:[1650,1650],s:2,xp:2500,dz:6000,boss:1,aura:'255,220,120',fam:'beast',gim:'かんしの め：スキルを つかうと ちから+1（1ターンに 1かい）',enrage:1,drop:null,rate:0,eqGive:'jiiyabell',eqMsg:'ベルが のこされた……チリン',
  cycle:['chirin','pedal','kanshi','cycle','kick'],moves:{chirin:{name:'チリン チリーン',dmg:17,hits:3,weak:2},pedal:{name:'ペダル キック',dmg:60},kanshi:{name:'かんしの め',addHand:'nemuke',n:2,vuln:2},cycle:{name:'ぜんりょく サイクリング',block:60,str:3},kick:{name:'ころす ためだよ',dmg:88}}};
 const ZB=[['kumiko','まがつ くみこ'],['fshark','まがつ ほのおの シャーク'],['unicorn','まがつ ユニユニコーン'],['fafa','まがつ ファファファファッくん'],['kumada','まがつ くまだささき'],['seirai','まがつ せいらい']];
 const ZBMV=[{a:{name:'まがつ びーむ',dmg:32,hits:5},b:{name:'やみの はね',str:6,block:150},c:{name:'しんえんの やり',dmg:75,vuln:2}},{a:{name:'のろいの ことば',addHand:'kyomu',n:3,weak:2},b:{name:'まがつ ほむら',dmg:24,hits:4},c:{name:'ほろびの いちげき',dmg:90}},
  {a:{name:'まがつ かべ',blockAll:120,str:4},b:{name:'ねじれる ひかり',dmg:12,hits:9},c:{name:'たましい くらい',dmg:55,drainE:1,addCard:'dokuke',n:3}}];
-ZB.forEach(([k,nm],i)=>{EN['zb_'+k]={name:nm,px:'pt_zb_'+k,hp:[5200,5200],s:2,xp:3200,dz:9000,boss:1,aura:'200,60,255',fam:['undead','water','beast','oni','beast','veg','bird','undead'][i],gim:'まがつの ちから：よわい こうかを 3かいまで むこうに する',art:3,drop:null,rate:0,cycle:['a','b','c'],moves:JSON.parse(JSON.stringify(ZBMV[i%3]))}});
+ZB.forEach(([k,nm],i)=>{EN['zb_'+k]={name:nm,px:'pt_zb_'+k,hp:[5200,5200],s:2,xp:3200,dz:9000,boss:1,aura:'200,60,255',fam:['undead','water','beast','oni','beast','veg','bird','undead'][i],gim:'まがつの ちから：デバフを 3かいまで むこうに する',art:3,drop:null,rate:0,cycle:['a','b','c'],moves:JSON.parse(JSON.stringify(ZBMV[i%3]))}});
 {const BE={admiral:['teitokucoat','ぐんぷくが のこされた…'],awanizaru:['awanicrown','おうかんが ころがった…'],bakapan:['bakabanana','バナナが おちていた…'],uranai:['suishodama','すいしょうだまが のこった…'],utsu:['utsufist','ちからが こぶしに やどった…'],jin:['jinkinko','きんこが のこされた…'],gi:['gireactor','げんどうろを てにいれた…'],rei:['reimask','かめんが おちた…'],chi:['chiougi','おうぎが まいおちた…'],shin2:['oninokokoro','こころが ひかりに なった…']};
  for(const [id,[eq,m]] of Object.entries(BE))if(EN[id]){EN[id].drop=null;EN[id].rate=0;EN[id].eqGive=eq;EN[id].eqMsg=m}}EN.kanisoi2={...JSON.parse(JSON.stringify(EN.kanisoi)),spr:'kanisoi'};
 (function(){for(const id in BAL){const e=EN[id],b=BAL[id];if(!e)continue;e.hp=e.hp.map(v=>Math.max(1,Math.round(v*b.h)));for(const mv of Object.values(e.moves)){if(mv.dmg)mv.dmg=Math.max(1,Math.round(mv.dmg*b.d));if(mv.block)mv.block=Math.round(mv.block*Math.sqrt(b.h))}e.xp=b.x}})();
@@ -1316,7 +1317,7 @@ const EQUIPS={
  phrog:{name:'かみの カエル',desc:'むぼうびの てきに あたえる ダメージが 1.75ばい（ふつうは 1.5ばい）',r:'unc'},
  horn:{name:'ツノぶえ',desc:'てきを たおすと マナ+1、1まい ひく',r:'unc'},
  sundial:{name:'ひどけい',desc:'やまふだを 3かい まぜなおすたび マナ+2',r:'unc'},
- deadbranch:{name:'かれえだ',desc:'カードを つかいきるたび ランダムな カードを てふだへ',r:'rare'},
+ deadbranch:{name:'かれえだ',desc:'カードを じょがい するたび ランダムな カードを てふだへ',r:'rare'},
  calipers:{name:'ノギス',desc:'ターンの はじめに ブロックが ぜんぶ きえず 15だけ へる',r:'rare'},
  incense:{name:'おこう',desc:'6ターンごとに 1ターン うける ダメージが 1に なる',r:'rare'},
  helix:{name:'かせきの らせん',desc:'たたかいで さいしょに うける ダメージを 0に する',r:'rare'},
@@ -1360,7 +1361,7 @@ const EQUIPS={
  needle:{name:'いとと はり',desc:'まいターン おわりに ブロック4（うけた こうげきで へる）',r:'rare'},
  ginger:{name:'しょうが',desc:'よわきに ならない',r:'rare'},
  champbelt:{name:'チャンピオンベルト',desc:'むぼうびを あたえるとき よわき1も あたえる',r:'rare'},
- charon:{name:'カロンの はい',desc:'カードを つかいきるたび てき ぜんたいに 3ダメージ',r:'rare'},
+ charon:{name:'カロンの はい',desc:'カードを じょがい するたび てき ぜんたいに 3ダメージ',r:'rare'},
  runiccube:{name:'ルーンの キューブ',desc:'HPが へるたび 1まい ひく',r:'rare'},
  burnblood:{name:'もえる ち',desc:'たたかいの あと HPを 6 かいふく',r:'unc'},
  blackblood:{name:'くろい ち',desc:'たたかいの あと HPを 12 かいふく',r:'rare'},
@@ -1389,11 +1390,16 @@ const EQUIPS={
  teppeki:{name:'てっぺきの こぶし',desc:'ターンの おわりに のこった ブロックの はんぶんを ランダムな てきに ダメージ',r:'rare'},
  bossgoroshi:{name:'ボスごろしの しるし',desc:'ボスに あたえる ダメージ+30%',r:'rare'},
  haisui:{name:'はいすいの はちまき',desc:'HPが 3わり いかの とき こうげきダメージ 2ばい',r:'rare'},
- horobi:{name:'ほろびの うた',desc:'カードを つかいきるたび この たたかい ちから+1',r:'rare'},
+ horobi:{name:'ほろびの うた',desc:'カードを じょがい するたび この たたかい ちから+1',r:'rare'},
  atsuyoroi:{name:'あつい よろい',desc:'スキルで える ブロック+6',r:'unc'},
  karuwazagutsu:{name:'かるわざの くつ',desc:'マナ0の カードを つかうたび 1まい ひく（1ターン 3かいまで）',r:'rare'},
  zbcore:{name:'まがつ コア',desc:'【まがつ】たたかいの はじめに ちから+3、ブロック20。てきを たおすたび マナ+1',evt:1,boss:1},
  jiiyabell:{name:'じいやの ベル',desc:'【ボス】てきの こうげきを 20%で かわす。まいターン 1まい おおく ひく',evt:1,boss:1},
+ jigokuame:{name:'じごくの あめ',desc:'【きわみ】たたかいの はじめに てき ぜんたいに 999ダメージ',evt:1,boss:1},
+ brobonkan:{name:'ブロボンの おうかん',desc:'【きわみ】まいターン マナ+4',evt:1,boss:1},
+ icebaka:{name:'アイスクリームバカパン',desc:'【きわみ】まいターン ひく カードが 5まい ふえる',evt:1,boss:1},
+ chunyasuF:{name:'チュンヤスファンタジー',desc:'【きわみ】すべての ステータスが 2ばい（HP・こうげき・ぼうぎょ）',evt:1,boss:1},
+ armak:{name:'アーマキウス',desc:'【きわみ】じょうたいいじょうに ならず、てきに カードを いれられない。すべての カードの コスト-1（さいてい0）',evt:1,boss:1},
  suikanotane:{name:'スイカの たね',desc:'【うらボス】たたかいの はじめに ちから+6、みのこなし+6、ブロック50。まいターン マナ+1、1まい おおく ひく',evt:1,boss:1},
  tokage:{name:'トカゲのしっぽ',desc:'ちからつきた とき HP50%で ふっかつ（やどや・いずみで もとに もどる）',r:'rare'}
 };
@@ -1412,8 +1418,9 @@ const cp=c=>{const raw=c.up?CARDS[c.id].u:CARDS[c.id].b;const [fa,fd]=lvScale();
  if(Array.isArray(o.rndPoison))o.rndPoison=[Math.round(o.rndPoison[0]*fa),o.rndPoison[1]];CPC.set(k,o);return o};
 const cname=c=>CARDS[c.id].name+(c.up?'+':'');
 const needsTarget=p=>!p.aoe&&!p.rnd&&!!(p.dmg||p.bodyslam||p.poison||p.vuln||p.weak||p.mark||p.catalyst||p.stealBlock||p.execute||p.disarm||p.spotWeak||p.choke||p.malaise!=null||p.mindBlast||p.fixed||p.wail&&!p.aoe);
-const effAtk=()=>PL?(PL.atk||10)+(PL.bonA||0)+(has('niji')?1:0)+(has('tekko')?1:0):10;
-const effDef=()=>PL?(PL.def||10)+(PL.bonD||0)+(has('kaigara')?1:0):10;
+const effAtk=()=>PL?((PL.atk||10)+(PL.bonA||0)+(has('niji')?1:0)+(has('tekko')?1:0))*(has('chunyasuF')?2:1):10;
+const effDef=()=>PL?((PL.def||10)+(PL.bonD||0)+(has('kaigara')?1:0))*(has('chunyasuF')?2:1):10;
+const hpM=()=>PL&&has('chunyasuF')?2:1;
 const FLV={B1:1,B2:2,B3:3,A1:5,S1:6,S2:6,C1:7,L1:7,L2:8,BT:10,BF:10,HV1:11,HV2:12,HV3:13,RV:13,PJ:14,PT:15,H1:18,H2:19,H3:20,HL0:20,NT:22,CP:22,OH:24,OW:25,Z:40,ZI:50};
 function lvBonus(){if(!PL)return 0;const a=FLV[PL.floor];return a==null?0:Math.min(60,Math.max(0,PL.lv-a)*3)}
 const scaleA=b=>Math.round(b*effAtk()/10*(1+lvBonus()/100)), scaleD=b=>Math.round(b*(10+(effDef()-10)*.8)/10);
@@ -1464,13 +1471,13 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.ftl)a.push('このターン つかった カードが 3まい みまんなら 1まい ひく');
  if(p.rage)a.push(`このターン こうげきカードを つかうたび ブロック${p.rage}`);
  if(p.flameB)a.push(`つぎの ターンまで こうげきして きた てきに ${p.flameB}ダメージ`);
- if(p.secondWind)a.push(`てふだの こうげき いがいを すべて つかいきり、1まいにつき ブロック${p.secondWind}`);
+ if(p.secondWind)a.push(`てふだの こうげき いがいを すべて じょがいし、1まいにつき ブロック${p.secondWind}`);
  if(p.dualWield)a.push(`てふだの こうげきか パワーを 1まい えらび、コピーを ${p.dualWield}まい つくる`);
  if(p.doubleBlock)a.push('いまの ブロックを 2ばいに する');
  if(p.addTok)a.push(`すてふだに「${CARDS[p.addTok].name}」を くわえる`);
- if(p.fiendFire)a.push('てふだを すべて つかいきり、1まいにつき その ダメージ');
+ if(p.fiendFire)a.push('てふだを すべて じょがいし、1まいにつき その ダメージ');
  if(p.barricade)a.push('ブロックが ターンの はじめに きえなく なる');
- if(p.corrupt)a.push('スキルが マナ0に なる。スキルは つかうと つかいきり');
+ if(p.corrupt)a.push('スキルが マナ0に なる。スキルは つかうと じょがい');
  if(p.wraith)a.push(`${p.wraith}ターン うける ダメージが 1に なる。まいターン みのこなし-1`);
  if(p.echoForm)a.push('まいターン さいしょに つかう カードを 2かい つかう');
  if(p.storm)a.push(`てふだを すべて すて、1まいにつき「くない${p.storm>1?'+':''}」を てふだへ`);
@@ -1494,7 +1501,7 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.sneaky)a.push('このターン カードを すてていたら マナ+2');
  if(p.draw)a.push(`${p.draw}まい ひく`);
  if(p.noDraw)a.push('このターン もう ひけない');
- if(p.purge)a.push('てふだの じょうたいカードを すべて つかいきり、1まいにつき マナ+1');
+ if(p.purge)a.push('てふだの じょうたいカードを すべて じょがいし、1まいにつき マナ+1');
  if(p.atkBlock)a.push(`こうげきカードを つかうたび ブロック${p.atkBlock}`);
  if(p.dup)a.push('つぎに つかう カードを 2かい つかう');
  if(p.recallFree)a.push('すてふだから 1まい えらんで てふだへ。その カードは このターン マナ0');
@@ -1522,10 +1529,10 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.cuts)a.push(`カードを つかうたび てき ぜんたいに ${p.cuts}ダメージ`);
  if(p.bfb)a.push('HPを うしなうたび コストが 1 へる');
  if(p.combust)a.push(`ターンの おわりに HP-1、てき ぜんたいに ${p.combust}ダメージ`);
- if(p.darkEmb)a.push('カードを つかいきるたび 1まい ひく');
+ if(p.darkEmb)a.push('カードを じょがい するたび 1まい ひく');
  if(p.disarm)a.push(`てきの ちから-${p.disarm}（ずっと）`);
  if(p.evolve)a.push(`じょうたいカードを ひくたび ${p.evolve}まい ひく`);
- if(p.fnp)a.push(`カードを つかいきるたび ブロック${p.fnp}`);
+ if(p.fnp)a.push(`カードを じょがい するたび ブロック${p.fnp}`);
  if(p.fireBreath)a.push(`じょうたい・のろいカードを ひくたび てき ぜんたいに ${p.fireBreath}ダメージ`);
  if(p.rndAtk)a.push('ランダムな こうげきカードを てふだへ（このターン マナ0）');
  if(p.rndSkl)a.push('ランダムな スキルカードを てふだへ（このターン マナ0）');
@@ -1534,12 +1541,12 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.metal)a.push(`ターンの おわりに ブロック${p.metal}`);
  if(p.woundHand)a.push(`てふだに「けが」を ${p.woundHand}まい`);
  if(p.rupture)a.push(`カードで HPを うしなうたび ちから+${p.rupture}`);
- if(p.sentinel)a.push(`つかいきられると マナ+${p.sentinel}`);
- if(p.exNonAtk)a.push('てふだの こうげき いがいを すべて つかいきる');
+ if(p.sentinel)a.push(`じょがい されると マナ+${p.sentinel}`);
+ if(p.exNonAtk)a.push('てふだの こうげき いがいを すべて じょがい する');
  if(p.spotWeak)a.push(`こうげき しようと している てきなら ちから+${p.spotWeak}`);
  if(p.berserk)a.push('まいターン マナ+1');
  if(p.selfVuln)a.push(`じぶんに むぼうび${p.selfVuln}`);
- if(p.exhume)a.push('つかいきった カードを 1まい てふだへ');
+ if(p.exhume)a.push('じょがい した カードを 1まい てふだへ');
  if(p.discardRnd)a.push(`てふだを ランダムに ${p.discardRnd}まい すてる`);
  if(p.innate)a.push('さいしょの てふだに かならず くる');
  if(p.blur)a.push('つぎの ターン ブロックが きえない');
@@ -1569,16 +1576,16 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.impatience)a.push(`てふだに こうげきが なければ ${p.impatience}まい ひく`);
  if(p.madness)a.push('てふだ1まいを ランダムに この たたかい マナ0に');
  if(p.mindBlast)a.push('やまふだの まいすうぶん ダメージ');
- if(p.art)a.push(`アーティファクト${p.art}（よわいこうかを ふせぐ）`);
+ if(p.art)a.push(`アーティファクト${p.art}（デバフを ふせぐ）`);
  if(p.panic)a.push(`${p.panic}ターン カードで ブロックを えられない`);
- if(p.exN)a.push(`てふだを ${p.exN}まいまで えらんで つかいきる`);
+ if(p.exN)a.push(`てふだを ${p.exN}まいまで えらんで じょがい する`);
  if(p.chrys)a.push(`ランダムな スキル${p.chrys}まいを やまふだへ（マナ0）`);
  if(p.metam)a.push(`ランダムな こうげき${p.metam}まいを やまふだへ（マナ0）`);
  if(p.greed)a.push(`これで たおすと ${p.greed}ダイズ`);
  if(p.magnet)a.push('まいターン ランダムな カードを てふだへ');
  if(p.mayhem)a.push('まいターン やまふだの うえを じどうで つかう');
  if(p.panache)a.push(`カードを 5まい つかうたび てき ぜんたいに ${p.panache}ダメージ`);
- if(p.sadistic)a.push(`てきに よわいこうかを あたえるたび ${p.sadistic}ダメージ`);
+ if(p.sadistic)a.push(`てきに デバフを あたえるたび ${p.sadistic}ダメージ`);
  if(p.secretSkl)a.push('やまふだから スキルを 1まい えらんで てふだへ');
  if(p.secretAtk)a.push('やまふだから こうげきを 1まい えらんで てふだへ');
  if(p.bomb)a.push(`3ターンご てき ぜんたいに ${p.bomb}ダメージ`);
@@ -1621,7 +1628,7 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.growBlock)a.push(`ほじ するたび ブロック+${p.growBlock}`);
  if(p.collect!=null)a.push(`つぎのターン「きせき+」を X${p.collect?'+'+p.collect:''}まい てふだへ`);
  if(p.deus)a.push(`ひいた とき「きせき」を ${p.deus}まい てふだへ`);
- if(p.omni)a.push('やまふだから 1まい えらび 2かい つかって つかいきる');
+ if(p.omni)a.push('やまふだから 1まい えらび 2かい つかって じょがい する');
  if(p.wish)a.push(`ちから+${3*p.wish}／ブロック${15*p.wish}（まいターン）／${100*p.wish}ダイズ から えらぶ`);
  if(p.conjure!=null)a.push(`「けしさる けん」（X${p.conjure?'+'+p.conjure:''}かい こうげき）を てふだへ`);
  if(p.xHits)a.push('つくった ときの Xの かずだけ くりかえす');
@@ -1637,9 +1644,9 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.headbutt)a.push('すてふだ1まいを やまふだの うえへ');
  if(p.recall)a.push('すてふだ1まいを てふだへ');
  if(p.upg)a.push(p.upg===2?'てふだを すべて きたえる':'てふだ1まいを きたえる');
- if(p.exRand)a.push('てふだを ランダムに 1まい つかいきる');
- if(p.exChoose)a.push('てふだを 1まい えらんで つかいきる');
- if(p.havoc)a.push('やまふだの いちばん うえを つかって つかいきる');
+ if(p.exRand)a.push('てふだを ランダムに 1まい じょがい する');
+ if(p.exChoose)a.push('てふだを 1まい えらんで じょがい する');
+ if(p.havoc)a.push('やまふだの いちばん うえを つかって じょがい する');
  if(p.copy)a.push(p.copy>1?`すてふだに コピーを ${p.copy}まい くわえる`:'すてふだに コピーを くわえる');
  if(p.wound)a.push('やまふだに「けが」を まぜる');
  if(p.shivs)a.push(`「くない」を ${p.shivs}まい てふだへ`);
@@ -1651,7 +1658,7 @@ function ctext(p,html,c){const a=[],all=p.aoe?'ぜんたいに ':'';let pre=all;
  if(p.debt)a.push(`てふだに くるたび さいだいHPの ${p.debt}% ダメージ。うれない・あずけられない`);
  if(p.ethereal)a.push('ターンの おわりに きえる');
  if(p.retain)a.push('ほじ');
- if(p.ex)a.push('つかいきり');
+ if(p.ex)a.push('じょがい');
  if(c&&CARDS[c.id].t==='pow')a.push('（ずっと つづく）');
  return a.join(' ');}
 const TYPEJP={atk:'こうげき',skl:'スキル',st:'じょうたい',pow:'パワー'};
@@ -1716,12 +1723,12 @@ const FLOORS={
   npcs:[{x:3,y:1,kind:'soldier',name:'しゅうじん',lines:['……おまえも ふほうにゅうこくか？\nおれは もと チュンぐんの へいしさ。','カッサーマーしれいかんが きてから この くには かわっちまった。\nおにそいさまに さからう ものは みんな ここ いきだ。','となりの ろうの じいさんは せいじはん らしい。\nなにか しってるかもな。']},
    {x:6,y:2,kind:'c5',name:'せいじはん',prisoner:1},
    {x:8,y:7,kind:'police',name:'かんしゅ',lines:['おとなしく していろ。']}]},
- L1:{name:'ちか けんきゅうしせつ あと',theme:'lab',enc:.03,rare:.01,groups:[['megane'],['megane','megane'],['bonesci'],['zombie'],['labshark'],['bonesci','megane'],['zombie','bonesci']],map:["########################################################", "##################################.....................#", "#.1............#...........#######..q.q.....q.q......>.#", "#..............#..mm....mm.#######.....................#", "#..........................#######.....................#", "#..q.q.q.q.q...............#######.....................#", "#............c.#...........#######.....................#", "#..............#.........c.#############..##############", "#####..#########...........#############..##############", "#####..###############..################..#####........#", "#####..###############..################..#####........#", "#...#..###############..################..#####..m..m..#", "#.$.#..##########..............#########..#####........#", "#...#..##########..............#.............##........#", "##%##..##########...qq....qq...#...........o.##........#", "#..........######..............4...~~~~................#", "#.q.q......######..............4...~~~~................#", "#.S........######..o........o..#...~~~~......##........#", "#..............................#.............##...m....#", "#q...........................q.#.o.........c.##......c.#", "#..........######..............#.............##........#", "########################################################"],
+ L1:{name:'ちか けんきゅうしせつ あと',theme:'lab',enc:.03,rare:.01,groups:[['megane'],['megane','megane'],['bonesci'],['zombie'],['labshark'],['bonesci','megane'],['zombie','bonesci']],map:["########################################################", "##################################.....................#", "#.1............#...........#######..q.q.....q.q......>.#", "#..............#..mm....mm.#######.....................#", "#..........................#######.....................#", "#..q.q.q.q.q...............#######.....................#", "#............c.#...........#######.....................#", "#..............#.........c.#############..##############", "#####..#########...........#############..##############", "#####..###############..################..#####........#", "#####..###############..################..#####........#", "#...%..###############..################..#####..m..m..#", "#...#..##########..............#########..#####........#", "#$..#..##########..............#.............##........#", "#####..##########...qq....qq...#...........o.##........#", "#..........######..............4...~~~~................#", "#.q.q......######..............4...~~~~................#", "#.S........######..o........o..#...~~~~......##........#", "#..............................#.............##...m....#", "#q...........................q.#.o.........c.##......c.#", "#..........######..............#.............##........#", "########################################################"],
   '>':{to:'L2',x:20,y:21,dir:'up'},chests:{'25,7':{rand:1},'53,19':{rand:1},'13,6':{rand:1},'43,19':{rand:1}}},
- L2:{name:'けんきゅうしせつ さいおう',theme:'lab',enc:.03,rare:.01,groups:[['labshark','megane'],['zombie','zombie'],['bonesci','megane'],['labshark','bonesci'],['zombie'],['labshark']],map:["########################################", "####................................####", "####................k...............####", "####................................####", "####................................####", "####################.###################", "####################.###################", "####################U###################", "####################.###################", "################.........###############", "################.S.......###############", "################.........##...##########", "###################...#####.$.##########", "###################...#####...##########", "###################...######%###########", "##...........######...######..........##", "##.1.......c.######555######........2.##", "##...........#.............#.c........##", "##....m......#.o.........o.#.....m....##", "##.........................4..........##", "##.........................4..........##", "##..q.....q..#.............#..q....q..##", "##...........#......<......#..........##", "########################################"],
+ L2:{name:'けんきゅうしせつ さいおう',theme:'lab',enc:.03,rare:.01,groups:[['labshark','megane'],['zombie','zombie'],['bonesci','megane'],['labshark','bonesci'],['zombie'],['labshark']],map:["########################################", "####................................####", "####................k...............####", "####................................####", "####................................####", "####################.###################", "####################.###################", "####################U###################", "####################.###################", "################.........###############", "################.S.......###############", "################.........##..$##########", "###################...#####...##########", "###################...%%%%%...##########", "###################...##################", "##...........######...######..........##", "##.1.......c.######555######........2.##", "##...........#.............#.c........##", "##....m......#.o.........o.#.....m....##", "##.........................4..........##", "##.........................4..........##", "##..q.....q..#.............#..q....q..##", "##...........#......<......#..........##", "########################################"],
   '<':{to:'L1',x:52,y:2,dir:'left'},npcs:[{x:22,y:10,kind:'shain',shain:1,pt:'shain'}],chests:{'11,16':{rand:1},'29,17':{rand:1}}},
  BT:{out:1,name:'ブロコリーせい おうこく',theme:'bro',enc:0,map:["yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy", "yy.......HHHHHHHHHHHH.......yy", "y........HHHHHHHHHHHH........y", "y..h..h..HHHHHHHHHHHH........y", "y........HHHHHHHHHHHH......y.y", "y.............==.............y", "y..h..h.......==......h..h...y", "y.......y.....==....y........y", "y.............==.............y", "y============================>", "y============================>", "y.............==.............y", "y.............==.............y", "y.__________..==......h..h...y", "y.__________..==.............y", "y.__________..==.............y", "y.__________..==..y..........y", "y.__________..==.............y", "yy............==............yy", "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"],'>':{to:'BF',x:1,y:10,dir:'right'},chests:{},
-  npcs:[{x:4,y:11,kind:'oni',name:'にげてきた こおに',cond:'clear',lines:['してんのうが しんだ あと……','おそろしい ぼうりょくの おうが やってきて……','おにの しんでんを のっとって しまった……','もう かえる ばしょは ない。\nこっちで うまく やらないとな……']},{x:27,y:7,kind:'kaji',kaji:1},{x:14,y:5,kind:'broking',king:1},{x:12,y:5,kind:'bro',name:'だいじん',setFlag:'heardR',lines:['R国を しっておるか？\nわが ブロコリーせいの しょくミンチ じゃ。','R国は P国の すぐ となり。\nひこうじょうから R国いきの べんが でておる。','……もっとも いまは せんじちゅう。\nおちついたら の はなし じゃがな。']},
+  npcs:[{x:4,y:11,kind:'oni',name:'にげてきた こおに',cond:'clear',lines:['してんのうが しんだ あと……','おそろしい ぼうりょくの おうが やってきて……','おにの しんでんを のっとって しまった……','もう かえる ばしょは ない。\nこっちで うまく やらないとな……']},{x:27,y:7,kind:'kaji',kaji:1},{x:14,y:5,kind:'broking',king:1},{x:12,y:5,kind:'bro',name:'だいじん',setFlag:'heardR',lines:['R国を しっておるか？\nわが ブロコリーせいの しょくミンチ じゃ。','R国は P国の すぐ となり。\nひこうじょうから R国いきの べんが でておる。','……もっとも いまは せんじちゅう。\nおちついたら の はなし じゃがな。'],linesF:['honoo',['R国を しっておるか？\nわが ブロコリーせいの しょくミンチ じゃ。','R国は P国の すぐ となり。\nいくさも ひとまず おちついての、\nいまは ひこうじょうから R国いきの べんが でておるぞ。']]},
    {x:17,y:5,kind:'bro',name:'このえへい',lines:['ブロブロじゅうに うたれると カリフラーに なっちまう！\nてふだに しろい カードが まざったら きをつけろ！']},
    {x:22,y:7,kind:'inn',inn:1},{x:25,y:7,kind:'shopkeep',shop:'bro'},{x:22,y:14,kind:'bank',bank:1},{x:25,y:4,kind:'kumiko',name:'くみこ',kumiko:1,pt:'kumiko'},{x:10,y:12,kind:'jiiya',jiiya:1,roam:1,pt:'jiiya'},{x:2,y:11,kind:'c3',name:'カードの おろしや',cardshop:1},{x:27,y:15,kind:'bro',name:'ブロコリーの コック',quest:'q4'},
    {x:6,y:8,kind:'bro',name:'しみん',lines:['ぱっぱらぴぃ！ ぱっぱらぴぃ！\nブロコリーおんどを おどって いれば こわくない！']},
@@ -1729,8 +1736,8 @@ const FLOORS={
    {x:25,y:11,kind:'bro',name:'しみん',lines:['ホテルベジタブルは おにそいさまが たてた ホテルさ。\nほしを たてに つらぬいて、こっきょうせんに なってる。','ブロカリの たおされた かずで ホテルが うごいて、\nぜんせんが めに みえるんだ。']},
    {x:9,y:15,kind:'sailor',name:'パイロット',airship:'BT'},{x:3,y:15,kind:'clerk',name:'くうこう うけつけ',airport:'BT'}]},
  BF:{out:1,name:'ブロコリーせい ぜんせん',theme:'bro',enc:.045,rare:.01,groups:[['karihei'],['karihei','karihei'],['karishoko'],['karihei','karishoko']],map:[],'<':{to:'BT',x:28,y:9,dir:'left'},'O':{to:'HV1',x:3,y:1,dir:'down'},chests:{},npcs:[]},
- HV1:{name:'ホテルベジタブル ちか',theme:'lab',enc:.035,rare:.01,groups:[['bellboy'],['broheishi'],['karihei','bellboy'],['broheishi','karihei']],map:["##############################", "#.<......#####################", "#........###...............c.#", "#........###....q.......q....#", "#S.......###.................#", "#........###..######..########", "#####..#####..######..##...###", "#####..#####..######..##.$.###", "#####..#####..######..##...###", "#................###..###%####", "#..m.....m.......#...........#", "#.......o......m.#.......o.>.#", "#................#...........#", "##############################"],'<':{to:'BF',x:35,y:12,dir:'down'},'>':{to:'HV2',x:2,y:8,dir:'right'},chests:{'27,2':{rand:1}}},
- HV2:{name:'ホテルベジタブル きゃくしつ',theme:'hall',enc:.035,rare:.01,groups:[['broheishi','karihei'],['karishoko'],['bellboy','bellboy'],['broheishi','broheishi'],['broheishi','karishoko']],map:["####################################", "####################################", "##.....T#...c.T#.....T#.....T#.....#", "##......#......#......#...c..#...>.#", "##......#......#......#......#...S.#", "##......#......#......#......#.....#", "####.######.######.######.######4###", "#....p......p......p......p......p.#", "#<vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#", "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#", "#..................................#", "####.######.######.######.##########", "##......#......#......#...........##", "##......#......#......#...........##", "##.1....#......#....c.#........c..##", "##.....T#.....T#.....T#...........##", "##########%#########################", "##########$#########################"],'<':{to:'HV1',x:26,y:11,dir:'left'},'>':{to:'HV3',x:10,y:9,dir:'up'},chests:{'12,2':{equip:'buronage'},'26,3':{rand:1},'20,14':{rand:1},'31,14':{rand:1}}},
+ HV1:{name:'ホテルベジタブル ちか',theme:'lab',enc:.035,rare:.01,groups:[['bellboy'],['broheishi'],['karihei','bellboy'],['broheishi','karihei']],map:["##############################", "#.<......#####################", "#........###...............c.#", "#........###....q.......q....#", "#S.......###.................#", "#........###..######..####%###", "#####..#####..######..##...###", "#####..#####..######..##...###", "#####..#####..######..##$..###", "#................###..########", "#..m.....m.......#...........#", "#.......o......m.#.......o.>.#", "#................#...........#", "##############################"],'<':{to:'BF',x:35,y:12,dir:'down'},'>':{to:'HV2',x:2,y:8,dir:'right'},chests:{'27,2':{rand:1}}},
+ HV2:{name:'ホテルベジタブル きゃくしつ',theme:'hall',enc:.035,rare:.01,groups:[['broheishi','karihei'],['karishoko'],['bellboy','bellboy'],['broheishi','broheishi'],['broheishi','karishoko']],map:["####################################", "####################################", "##.....T#...c.T#.....T#.....T#.....#", "##......#......#......#...c..#...>.#", "##......#......#......#......#...S.#", "##......#......#......#......#.....#", "####.######.######.######.######4###", "#....p......p......p......p......p.#", "#<vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#", "#vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv#", "#..................................#", "####.######.######.######.##########", "##......#......#......#...........##", "##......#......#......#...........##", "##.1....#......#....c.#........c..##", "##.....T#.....T#.....T#...........##", "#############%######################", "###########$..######################"],'<':{to:'HV1',x:26,y:11,dir:'left'},'>':{to:'HV3',x:10,y:9,dir:'up'},chests:{'12,2':{equip:'buronage'},'26,3':{rand:1},'20,14':{rand:1},'31,14':{rand:1}}},
  HV3:{name:'ホテルベジタブル さいじょうかい',theme:'hall',enc:0,map:["####################", "#T........F.......T#", "#..p.....vvv....p..#", "#........vvv.......#", "#..p.....vNv....p..#", "#........vvv.......#", "#..p.....vvv....p..#", "#........vvv.......#", "#..p.....vvv....p..#", "#T......Svvv......T#", "##########<#########"],'<':{to:'HV2',x:32,y:3,dir:'left'},npcs:[{x:3,y:9,kind:'shain',shain:1,pt:'shain'}],chests:{}},
  RV:{out:1,name:'R国',theme:'bro',enc:0,map:["yyyyyyyyyyynnyyyyyyyyyyy", "y..........==..........y", "y..........==..........y", "y..........==..........y", "y...h..h...==...h..h...y", "y..........==..........y", "y..........==..........y", "y..........==..........y", "y======================y", "y..........==..........y", "y..........==..........y", "y._______..==......h...y", "y._______..==..........y", "y._______..==..........y", "y..........==..........y", "yyyyyyyyyyyyyyyyyyyyyyyy"],chests:{},
   npcs:[{x:4,y:9,kind:'kaji',kaji:1},{x:9,y:12,kind:'clerk',name:'くうこう うけつけ',airport:'RV'},{x:20,y:6,kind:'bro',name:'ホテルずき',quest:'q5'},{x:18,y:10,kind:'jiiya',jiiya:1,roam:1,pt:'jiiya'},
@@ -1738,15 +1745,15 @@ const FLOORS={
    {x:17,y:9,kind:'bro',name:'むらびと',lines:['P国へ いくのかい？\nむらの きたの トンネルから トロッコで いけるよ。']},
    {x:15,y:3,kind:'bro',name:'むらびと',lines:['P国の ことばは さっぱり わからん。\nさるや チンパンジーの らくえん だからな。']}]},
  PT:{name:'P国 しれんの いせき',theme:'arena',enc:0,map:["################", "#T.....u......T#", "#..............#", "#..............#", "#######.########", "#..............#", "#..............#", "#..............#", "#######.########", "#..............#", "#..............#", "#..............#", "#######.########", "#..............#", "#............S.#", "#T.....<......T#", "################"],'<':{to:'PJ',x:29,y:4,dir:'left'},chests:{},
-  npcs:[{x:3,y:14,kind:'shain',shain:1,pt:'shain'},{x:7,y:12,kind:'monkey',name:'アワニザル',trial:1,ncond:'t1'},{x:7,y:8,kind:'monkey',name:'サルの むれ',trial:2,ncond:'t2'},{x:7,y:4,kind:'chimp',name:'バカパン',trial:3,ncond:'t3'}]},
- PJ:{out:1,name:'P国 ジャングル',theme:'jungle',enc:.03,rare:.01,groups:[['saru'],['saru','saru'],['saru','saru','saru']],'E':{to:'PT',x:7,y:14,dir:'up'},map:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TTTTTT..TTTTTTTTTTTTTT.TTT.TTTTT", "TTTTTTTT.TTTTTTTTTTTTTTTTTTTTTTT", "TTTTTT.TT.TTTTTT.T.TTTTT.......T", "TTT.T.TTTT.TTTTTTTTTTTTT......ET", "TTTTTTTT............TT.T.......T", "TT.TTTTTT.............TT...TTTTT", "TTTTTTTT............TTTT...TTTTT", "TT.TTTTTT...TTTTT...TTTT...TTTTT", "TTTTTTTTT...TTTTT....TTT...TTTTT", "TTTTTTTT....TTT.T...TTTT...T.TTT", "TT..........TTTTT...TTTT...TTTTT", "TT..........TTTTT....TT....TTTTT", "TT..........T..TT...........TT.T", "TT...TTTTTTTTTTTT...........TTTT", "TT...TTTTTTTTTTTT..........T.TTT", "TT...TTTTTTTTTTTTTT.T.TT...TT.TT", "T......TTTTTTT.TTT.TT.TTTTTTTTTT", "T.n....TTTT.TTTTTTTTTTTTT.TTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],chests:{},
+  npcs:[{x:3,y:14,kind:'shain',shain:1,pt:'shain'},{x:7,y:12,kind:'monkey',name:'アワニザル',trial:1,ncond:'t1'},{x:7,y:8,kind:'monkey',name:'サルの むれ',trial:2,ncond:'t2'},{x:7,y:4,kind:'chimp',name:'バカパン',trial:3,ncond:'t3'},{x:7,y:4,kind:'chimp',name:'バカパン',bakaEX:1,cond:'clear'}]},
+ PJ:{out:1,name:'P国 ジャングル',theme:'jungle',wall:'T',enc:.03,rare:.01,groups:[['saru'],['saru','saru'],['saru','saru','saru']],'E':{to:'PT',x:7,y:14,dir:'up'},map:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TT$..%..TTTTTTTTTTTTTT.TTT.TTTTT", "TT...TT%.TTTTTTTTTTTTTTTTTTTTTTT", "TTTTTT.T%.TTTTTT.T.TTTTT.......T", "TTT.T.TTT%.TTTTTTTTTTTTT......ET", "TTTTTTTT............TT.T.......T", "TT.TTTTTT.............TT...TTTTT", "TTTTTTTT............TTTT...TTTTT", "TT.TTTTTT...TTTTT...TTTT...TTTTT", "TTTTTTTTT...TTTTT....TTT...TTTTT", "TTTTTTTT....TTT.T...TTTT...T.TTT", "TT..........TTTTT...TTTT...TTTTT", "TT..........TTTTT....TT....TTTTT", "TT..........T..TT...........TT.T", "TT...TTTTTTTTTTTT...........TTTT", "TT...TTTTTTTTTTTT..........T.TTT", "TT...TTTTTTTTTTTTTT.T.TT...TT.TT", "T......TTTTTTT.TTT.TT.TTTTTTTTTT", "T.n....TTTT.TTTTTTTTTTTTT.TTTTTT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],chests:{},
   npcs:[{x:5,y:12,kind:'monkey',monkey:1},{x:12,y:7,kind:'chimp',monkey:1,name:'チンパンジー'},{x:17,y:10,kind:'monkey',monkey:1},{x:22,y:14,kind:'chimp',monkey:1,name:'チンパンジー'},{x:25,y:9,kind:'monkey',monkey:1},
    {x:10,y:11,kind:'chimp',name:'スロットざる',casino:1},{x:4,y:13,kind:'monkey',name:'サルつかい',quest:'q6'},{x:28,y:3,kind:'signpost',name:'たてふだ',lines:['しれんの いせき。\nみずの だいずを もとめる ものは 3つの かんもんを こえよ。']}]},
  HL0:{name:'じごく だいまおうの ま',theme:'hell',enc:0,map:["####################", "#T...jjjjjjjjjj...T#", "#...jjjjjjjjjjjj...#", "#........vv........#", "#..p.....vv.....p..#", "#........vv........#", "#..p.....vv.....p..#", "#........vv........#", "#..p.....vv.....p..#", "#........vv........#", "#........vv........#", "#########>##########"],'>':{to:'H3',x:2,y:2,dir:'down'},chests:{},
   npcs:[{x:8,y:9,kind:'police',name:'げーさつかん',cond:'hellArr',ncond:'tongue',lines:['……']},{x:10,y:9,kind:'utsu',pt:'utsu',name:'うつゅーじん',cond:'hellArr',ncond:'tongue',lines:['うつゅ……']}]},
- H1:{name:'じごく だい3かいそう「くさむしり」',theme:'hell',enc:.03,rare:0,groups:[['jkoni'],['jdaizu','jdaizu'],['jkoni','jdaizu']],map:["################################", "#############################<##", "#############################.##", "####......##ggggggggggggggg##.##", "####.c....##ggggggggggggggg....#", "####........gggggggrggggggg....#", "####......##ggggggggggggggg....#", "####......##gggggggggggggrg....#", "####......##ggglllggggggggg.c..#", "#####..#####ggglllggggggggg#####", "#####..#####ggglllggggggggg#####", "#####..#####ggggggggggggggg#####", "#####..#####ggggggggglllggg#####", "#.......T###ggggggggglllggg#####", "#.S......###ggggggggggggggg#####", "#...........ggggggggggggggg#####", "#...........grggggggggggggg#...#", "#..T.....###ggggggggggggggg%.$.#", "#........###ggggggggggggggg#...#", "################################"],'<':{to:'H2',x:3,y:19,dir:'up'},chests:{},npcs:[{x:5,y:17,kind:'fafa',fafa:1,pt:'fafa'},{x:13,y:4,kind:'weed',weed:0,ncond:'wd:0'},{x:18,y:4,kind:'weed',weed:1,ncond:'wd:1'},{x:24,y:4,kind:'weed',weed:2,ncond:'wd:2'},{x:14,y:12,kind:'weed',weed:3,ncond:'wd:3'},{x:20,y:9,kind:'weed',weed:4,ncond:'wd:4'},{x:25,y:10,kind:'weed',weed:5,ncond:'wd:5'},{x:13,y:17,kind:'weed',weed:6,ncond:'wd:6'},{x:19,y:16,kind:'weed',weed:7,ncond:'wd:7'},{x:24,y:16,kind:'weed',weed:8,ncond:'wd:8'},{x:17,y:13,kind:'weed',weed:9,ncond:'wd:9'},{x:22,y:6,kind:'weed',weed:10,ncond:'wd:10'},{x:29,y:3,kind:'armor',armor:1,ncond:'job1'},{x:28,y:5,kind:'armor',armor:1,cond:'job1'},{x:6,y:16,kind:'utsu',pt:'utsu',name:'うつゅーじん',lines:['うつゅー……','……おまえも したを ぬかれたのか。うつゅー。','くさむしりは いやだ……うつゅー……']},{x:2,y:17,kind:'c5',name:'もうじゃ',lines:['ここは じごくの いちばん した。\nはたらいて かいきゅうを あげる しか ないのさ……','ごくそつに いわれた しごとを こなせば うえへ いける。']}]},
- H2:{name:'じごく だい2かいそう「さいしゅう」',theme:'hell',enc:.035,rare:0,groups:[['jkoni','jkoni'],['jzombie'],['jdaizu','jzombie']],map:["##################################", "#c...........................##<##", "#...........r................##.##", "#............................#..##", "#................................#", "#llllllllllllllllllllllllll..llll#", "#llllllllllllllllllllllllll..llll#", "#................................#", "#...................r............#", "#................................#", "#......llllllllllllllllllllllllll#", "#......llllllllllllllllllllllllll#", "#................................#", "#.............r..................#", "#........................r.......#", "#................................#", "#####..###############%###########", "#.......T.###########...##########", "#.........c##########.$.##########", "#.........###########...##########", "#.>.......########################", "##################################"],'>':{to:'H1',x:29,y:2,dir:'down'},'<':{to:'H3',x:3,y:20,dir:'up'},chests:{},npcs:[{x:2,y:3,kind:'ore',ore:0,ncond:'or:0'},{x:15,y:2,kind:'ore',ore:1,ncond:'or:1'},{x:24,y:3,kind:'ore',ore:2,ncond:'or:2'},{x:9,y:8,kind:'ore',ore:3,ncond:'or:3'},{x:22,y:8,kind:'ore',ore:4,ncond:'or:4'},{x:30,y:8,kind:'ore',ore:5,ncond:'or:5'},{x:12,y:14,kind:'ore',ore:6,ncond:'or:6'},{x:28,y:13,kind:'ore',ore:7,ncond:'or:7'},{x:31,y:2,kind:'armor',armor:1,ncond:'job2'},{x:30,y:4,kind:'armor',armor:1,cond:'job2'},{x:5,y:18,kind:'c5',name:'もうじゃ',lines:['ちのいけの ほおずきは おにの こうぶつ でね……\nとろうと すると おこって おそってくるよ。']}]},
- H3:{name:'じごく だい1かいそう「とうばつ」',theme:'hell',enc:.035,rare:0,groups:[['jzombie','jkoni'],['jkoni','jkoni','jdaizu'],['jzombie','jzombie']],map:["##############################", "#<.###########.T...........T.#", "#..###########...............#", "#..###########...............#", "##.........###...............#", "###........###...............#", "###........##########..##%####", "###........##########..#...###", "###....................#.$.###", "###........##########..#...###", "###........##########..#######", "###.c......##########..#######", "###........####..............#", "###############..............#", "###############..p........p..#", "###############..............#", "###############..............#", "#........S.####..............#", "#................p........p..#", "#..........................c.#", "#.>........####..............#", "##############################"],'>':{to:'H2',x:31,y:2,dir:'down'},'<':{to:'HL0',x:9,y:10,dir:'up'},chests:{},
+ H1:{name:'じごく だい3かいそう「くさむしり」',theme:'hell',enc:.03,rare:0,groups:[['jkoni'],['jdaizu','jdaizu'],['jkoni','jdaizu']],map:["################################", "#############################<##", "#############################.##", "####......##ggggggggggggggg##.##", "####.c....##ggggggggggggggg....#", "####........gggggggrggggggg....#", "####......##ggggggggggggggg....#", "####......##gggggggggggggrg....#", "####......##ggglllggggggggg.c..#", "#####..#####ggglllggggggggg###%#", "#####..#####ggglllggggggggg###%#", "#####..#####ggggggggggggggg###%#", "#####..#####ggggggggglllggg###%#", "#.......T###ggggggggglllggg###%#", "#.S......###ggggggggggggggg###%#", "#...........ggggggggggggggg###%#", "#...........grggggggggggggg#...#", "#..T.....###ggggggggggggggg#...#", "#........###ggggggggggggggg#$..#", "################################"],'<':{to:'H2',x:3,y:19,dir:'up'},chests:{},npcs:[{x:5,y:17,kind:'fafa',fafa:1,pt:'fafa'},{x:13,y:4,kind:'weed',weed:0,ncond:'wd:0'},{x:18,y:4,kind:'weed',weed:1,ncond:'wd:1'},{x:24,y:4,kind:'weed',weed:2,ncond:'wd:2'},{x:14,y:12,kind:'weed',weed:3,ncond:'wd:3'},{x:20,y:9,kind:'weed',weed:4,ncond:'wd:4'},{x:25,y:10,kind:'weed',weed:5,ncond:'wd:5'},{x:13,y:17,kind:'weed',weed:6,ncond:'wd:6'},{x:19,y:16,kind:'weed',weed:7,ncond:'wd:7'},{x:24,y:16,kind:'weed',weed:8,ncond:'wd:8'},{x:17,y:13,kind:'weed',weed:9,ncond:'wd:9'},{x:22,y:6,kind:'weed',weed:10,ncond:'wd:10'},{x:29,y:3,kind:'armor',armor:1,ncond:'job1'},{x:28,y:5,kind:'armor',armor:1,cond:'job1'},{x:6,y:16,kind:'utsu',pt:'utsu',name:'うつゅーじん',lines:['うつゅー……','……おまえも したを ぬかれたのか。うつゅー。','くさむしりは いやだ……うつゅー……']},{x:2,y:17,kind:'c5',name:'もうじゃ',lines:['ここは じごくの いちばん した。\nはたらいて かいきゅうを あげる しか ないのさ……','ごくそつに いわれた しごとを こなせば うえへ いける。']}]},
+ H2:{name:'じごく だい2かいそう「さいしゅう」',theme:'hell',enc:.035,rare:0,groups:[['jkoni','jkoni'],['jzombie'],['jdaizu','jzombie']],map:["##################################", "#c...........................##<##", "#...........r................##.##", "#............................#..##", "#................................#", "#llllllllllllllllllllllllll..llll#", "#llllllllllllllllllllllllll..llll#", "#................................#", "#...................r............#", "#................................#", "#......llllllllllllllllllllllllll#", "#......llllllllllllllllllllllllll#", "#................................#", "#.............r..................#", "#........................r.......#", "#................................#", "#####..#################%#########", "#.......T.###########...%#########", "#.........c##########...##########", "#.........###########$..##########", "#.>.......########################", "##################################"],'>':{to:'H1',x:29,y:2,dir:'down'},'<':{to:'H3',x:3,y:20,dir:'up'},chests:{},npcs:[{x:2,y:3,kind:'ore',ore:0,ncond:'or:0'},{x:15,y:2,kind:'ore',ore:1,ncond:'or:1'},{x:24,y:3,kind:'ore',ore:2,ncond:'or:2'},{x:9,y:8,kind:'ore',ore:3,ncond:'or:3'},{x:22,y:8,kind:'ore',ore:4,ncond:'or:4'},{x:30,y:8,kind:'ore',ore:5,ncond:'or:5'},{x:12,y:14,kind:'ore',ore:6,ncond:'or:6'},{x:28,y:13,kind:'ore',ore:7,ncond:'or:7'},{x:31,y:2,kind:'armor',armor:1,ncond:'job2'},{x:30,y:4,kind:'armor',armor:1,cond:'job2'},{x:5,y:18,kind:'c5',name:'もうじゃ',lines:['ちのいけの ほおずきは おにの こうぶつ でね……\nとろうと すると おこって おそってくるよ。']}]},
+ H3:{name:'じごく だい1かいそう「とうばつ」',theme:'hell',enc:.035,rare:0,groups:[['jzombie','jkoni'],['jkoni','jkoni','jdaizu'],['jzombie','jzombie']],map:["##############################", "#<.###########.T...........T.#", "#..###########...............#", "#..###########...............#", "##.........###...............#", "###........###...............#", "###........##########..#######", "###........##########..#$..###", "###....................#...###", "###........##########..#...###", "###........##########..###%###", "###.c......##########..###%###", "###........####..............#", "###############..............#", "###############..p........p..#", "###############..............#", "###############..............#", "#........S.####..............#", "#................p........p..#", "#..........................c.#", "#.>........####..............#", "##############################"],'>':{to:'H2',x:31,y:2,dir:'down'},'<':{to:'HL0',x:9,y:10,dir:'up'},chests:{},
   npcs:[{x:6,y:18,kind:'shain',shain:1,pt:'shain'},{x:2,y:3,kind:'armor',armor:1,ncond:'job3'},{x:4,y:5,kind:'armor',armor:1,cond:'job3'},{x:21,y:2,kind:'uranai',uranai:1,ncond:'uraD'},
    {x:8,y:19,kind:'c5',name:'もうじゃ',lines:['おくの へやの うらないしは ずっと ねてばかり……\nそれなのに おにが どんどん ふえていく。ぶきみだよ。']}]},
  NT:{out:1,name:'C国 ていと ネシと',theme:'nesi',enc:0,map:["HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", "HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", "HHHHHHHHHHHHHHHXXXXHHHHHHHHHHHHHHH", "H...............==...............H", "H.BBBBBB.tt.....==.......BBBBBBB.H", "H.BBBBBB....L........L...BBBBBBB.H", "H.BBBBBB........KK.......BBBBBBB.H", "H.BBdBBB.................BBBdBBB.H", "H...........L........L...........H", "H...............==...............H", "H================================>", "H================================>", "H...............==...............H", "H.BBBBBB.BBBB...==.......BBBBBBB.H", "H.BBBBBB.BBBB...==.......BBBBBBB.H", "H.BBBBBB.BBBB...==....tt.BBBBBBB.H", "H.BBdBBB.BBBB...==.......BBdBBBB.H", "H...............==...............H", "H............t..==..t............H", "Ht..............==....O.........tH", "H.............wwPPww.............H", "HHHHHHHHHHHHHHwwwwwwHHHHHHHHHHHHHH"],'>':{to:'CP',x:1,y:8,dir:'right'},'O':{to:'L1',x:3,y:19,dir:'up'},chests:{},
@@ -1764,14 +1771,14 @@ const FLOORS={
  CP:{out:1,name:'C国 へいげん',theme:'plain',enc:.045,rare:.01,groups:[['haraoni','haraoni'],['dancer'],['kakure','kakure'],['dancer','kakure'],['haraoni','dancer']],npcs:[{x:4,y:11,kind:'fshark',name:'ほのおの シャーク',fshark:1,pt:'fshark'},{x:20,y:12,kind:'jiiya',jiiya:1,roam:1,pt:'jiiya'}],map:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "T.........~~~.............~~...........T", "T.c.......~~~.............~~.r......r..T", "T...r.....~~~..r.......................T", "T.........~~~.......::::::::::::::::...T", "T.........~~~.......::::::::::::::::...T", "T..........~........::............::...T", "T..........~........::............::...T", "<:::::::::::::::::::::...~~~......::...T", "<:::::::::::::::::::::...~~~......::...T", "T........................~~~..r...::...T", "T.......r................~~~......::...T", "T.........~~~..........r.~~~......::...T", "T.........~~~....r.......~~~.......::..T", "T.....r...~~~............~~~.......E...T", "T.........~~~............~~~...r.....r.T", "T.........~~~............~~~..........cT", "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"],'<':{to:'NT',x:32,y:12,dir:'left'},'E':{to:'OH',x:7,y:10,dir:'up'},chests:{}},
  OH:{name:'おにの ほこら',theme:'shrine',enc:0,map:["################", "#.....XXXX.....#", "#..T...vv...T..#", "#......vv......#", "#......vv......#", "#......vv......#", "#......vv......#", "#..T...vv...T..#", "#......vv......#", "#......vv......#", "#......vv......#", "#######<<#######"],'<':{to:'CP',x:35,y:13,dir:'up'},chests:{},
   npcs:[{x:6,y:3,kind:'signpost',name:'せきひ',lines:['おにの ほこら。\n4つの だいずの けいしょうしゃ のみ、とびらを ひらくべし。','（4つの だいずを もつ ものが ふれると、とびらは ひらく）']}]},
- OW:{name:'おにの せかい',theme:'oniw',enc:.04,rare:.01,groups:[['yamioni'],['kageraji','kageraji'],['onimusha'],['yamioni','kageraji'],['yamioni','yamioni']],map:["#########################################", "#########################################", "##........#####################........##", "##........#####################........##", "##........#################............##", "##............#############............##", "##............#############..##........##", "##......c.##..#############..##.c......##", "##........##..#############..##........##", "#####..#####..#############..#####..#####", "#####..#####..#############..#####..#####", "#####..#####..#############..#####..#####", "#####..#####..##....<....##..#####..#####", "#####..#####..##.............#####..#####", "#####..#####.................#####..#####", "#####..#####.............#########..#####", "#####..#########.........#########..#####", "#####..#########....S....#########..#####", "#####..#########.........#########..#...#", "#####..#########..#####..#########..%.$.#", "#####..#########..#####..#########..#...#", "#####..####.......#####..#########..#####", "##........#.......#####..######........##", "##......c.#..##########..######.c......##", "##...........##########..######........##", "##...........##########................##", "##........#############................##", "##........#####################........##", "##........#####################........##", "#########################################", "#########################################"],'<':{to:'OH',x:7,y:2,dir:'down'},chests:{},
-  npcs:[{x:20,y:18,kind:'suika',suika:1,cond:'clear',ncond:'suikaD'},{x:22,y:16,kind:'shain',shain:1,pt:'shain'},{x:3,y:3,kind:'jin',shiten:'jin',ncond:'sh:jin'},{x:37,y:3,kind:'gi',shiten:'gi',ncond:'sh:gi'},{x:3,y:27,kind:'rei',shiten:'rei',ncond:'sh:rei'},{x:37,y:27,kind:'chi',shiten:'chi',ncond:'sh:chi'}]},
- Z:{out:1,name:'Z国 ジュラの みつりん',theme:'jura',wall:'V',enc:.04,rare:.05,rareId:'zmyarinbo',groups:[['tyranno'],['raptor','raptor','raptor'],['tricera'],['ptera','ptera'],['cheetah'],['plant','raptor'],['tricera','ptera'],['cheetah','raptor']],map:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TfT.T,fT,TfTTf.Ty...f.T.fTTf.VVVVTVVvvvvvVVVVVVVVT", "T....TTy.ff.,f..y.,..f.Tf.T,TVqqV.vvVvvvVVV$VVVVVT", "T..c.......,.T.......T,TTT.TyVqqVfvvvvvvvVV%VVVVVT", "T........ff..TTyy,.c.ffr..,..T~~..vvvvvvvvvvvvvvvT", "T..ffT...yTfTTTTf....yffT..,,T~~TfvvvvvvvvvvvvvvVT", "Ty.TT.,.b.b.b.yfT...fy......y,~~fTvvvvvvvvvvvvvvvT", "TTfy..f....b..y......T....,T.f~~..vvvvvvvvvvvvvvvT", "Tff..TT.b.b.b.f,T...,.f..yyfy.~~y.vvvvvvSvvvvvcvvT", "TT.f,..f.,,,........rf,r.Tryf.~~,.vvvvvvvvvvvvvvvT", "T..f.,,.,,,........TTfTyT...T.~~..vvvvvvvvvvvvvvvT", "T..y.f,..Tf,fTf.e...f.,T...TyT~~..vvvvvvvvvvvvvvvT", "TTf..yT...TT.fT....e..........==..vvvvvvvvvvvvVvvT", "TTyff.f,TfTyT.r...e...........==..vVvvvvvvvvvvvvvT", "TfTTT.yTT...fyf,Tfy..,y.ffTf,,~~y,VvvvvvvvvvvvvvvT", "TTyTfTTfy.,....ff....T.....T,,~~.......yTTfT.r...T", "T,T..,,.T.yTy.y..,......TTy.fr~~TTy...f,..T.T..T,T", "T..fyy.y.T,.T.,..y..TT,,fTff.T~~..T...ff...fffTT.T", "Tf.yy,Tf......,.T....fT.T,ff..~~y.frfTTy..y..fTTTT", "TfTyyr..ff,ffTf.T,..yfyff...TT~~..,.Tf....yTT,...T", "T..,rT.y..fTy..TT,..y.Tf,...,y~~y..fT,.f...yTff.TT", "T..,y.f.yy.f.,Tyf...fy.TTTf...~~..fT..T...fTTff.TT", "T.yf..fT.................ff..y~~.............fyf,T", "T.T........c............TT,.fy~~f...........TyyT.T", "T.ff.,y........TfTT...........==...Tyy..yT..Tfy.,T", "TTTfr.....ff.frff..fT.........==.....T.f,T.......T", "TTT..,......T.yf..Tyf.........~~T.T.r.ff.f...c.,yT", "T..,T,..fTf,T.T..,T,f........,~~..T..Tf.T.f....yyT", "T,fT___..T.T,.f.r..T.........f~~T.T.y....fTTT.f,.T", "TTy.___.fy..y.,T.yTT..........~~f..y.T,fyT.Tr.TT.T", "T__________________________...~~.................T", "T___PP________________________~~_________________T", "wwwwPPwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwPPwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"],chests:{},
+ OW:{name:'おにの せかい',theme:'oniw',enc:.04,rare:.01,groups:[['yamioni'],['kageraji','kageraji'],['onimusha'],['yamioni','kageraji'],['yamioni','yamioni']],map:["#########################################", "#########################################", "##........#####################........##", "##........#####################........##", "##........#################............##", "##............#############............##", "##............#############..##........##", "##......c.##..#############..##.c......##", "##........##..#############..##........##", "#####..#####..#############..#####..#####", "#####..#####..#############..#####..#####", "#####..#####..#############..#####..#####", "#####..#####..##....<....##..#####..#####", "#####..#####..##.............#####..#####", "#####..#####.................#####..#####", "#####..#####.............#########..#####", "#####..#########.........#########..#####", "#####..#########....S....#########..#####", "#####..#########.........#########..#$..#", "#####..#########..#####..#########..#...#", "#####..#########..#####..#########..#...#", "#####..####.......#####..#########..##%##", "##........#.......#####..######........##", "##......c.#..##########..######.c......##", "##...........##########..######........##", "##...........##########................##", "##........#############................##", "##........#####################........##", "##........#####################........##", "#########################################", "#########################################"],'<':{to:'OH',x:7,y:2,dir:'down'},chests:{},
+  npcs:[{x:20,y:18,kind:'suika',suika:1,cond:'clear'},{x:22,y:16,kind:'shain',shain:1,pt:'shain'},{x:3,y:3,kind:'jin',shiten:'jin',ncond:'sh:jin'},{x:37,y:3,kind:'gi',shiten:'gi',ncond:'sh:gi'},{x:3,y:27,kind:'rei',shiten:'rei',ncond:'sh:rei'},{x:37,y:27,kind:'chi',shiten:'chi',ncond:'sh:chi'}]},
+ Z:{out:1,name:'Z国 ジュラの みつりん',theme:'jura',wall:'V',enc:.04,rare:.05,rareId:'zmyarinbo',groups:[['tyranno'],['raptor','raptor','raptor'],['tricera'],['ptera','ptera'],['cheetah'],['plant','raptor'],['tricera','ptera'],['cheetah','raptor']],map:["TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT", "TfT.T,fT,TfTTf.Ty...f.T.fTTf.VVVVTVVvvvvvVVVV$VVVT", "T....TTy.ff.,f..y.,..f.Tf.T,TVqqV.vvVvvvVVVVVvv%VT", "T..c.......,.T.......T,TTT.TyVqqVfvvvvvvvVVVVVV%VT", "T........ff..TTyy,.c.ffr..,..T~~..vvvvvvvvvvvvvvvT", "T..ffT...yTfTTTTf....yffT..,,T~~TfvvvvvvvvvvvvvvVT", "Ty.TT.,.b.b.b.yfT...fy......y,~~fTvvvvvvvvvvvvvvvT", "TTfy..f....b..y......T....,T.f~~..vvvvvvvvvvvvvvvT", "Tff..TT.b.b.b.f,T...,.f..yyfy.~~y.vvvvvvSvvvvvcvvT", "TT.f,..f.,,,........rf,r.Tryf.~~,.vvvvvvvvvvvvvvvT", "T..f.,,.,,,........TTfTyT...T.~~..vvvvvvvvvvvvvvvT", "T..y.f,..Tf,fTf.e...f.,T...TyT~~..vvvvvvvvvvvvvvvT", "TTf..yT...TT.fT....e..........==..vvvvvvvvvvvvVvvT", "TTyff.f,TfTyT.r...e...........==..vVvvvvvvvvvvvvvT", "TfTTT.yTT...fyf,Tfy..,y.ffTf,,~~y,VvvvvvvvvvvvvvvT", "TTyTfTTfy.,....ff....T.....T,,~~.......yTTfT.r...T", "T,T..,,.T.yTy.y..,......TTy.fr~~TTy...f,..T.T..T,T", "T..fyy.y.T,.T.,..y..TT,,fTff.T~~..T...ff...fffTT.T", "Tf.yy,Tf......,.T....fT.T,ff..~~y.frfTTy..y..fTTTT", "TfTyyr..ff,ffTf.T,..yfyff...TT~~..,.Tf....yTT,...T", "T..,rT.y..fTy..TT,..y.Tf,...,y~~y..fT,.f...yTff.TT", "T..,y.f.yy.f.,Tyf...fy.TTTf...~~..fT..T...fTTff.TT", "T.yf..fT.................ff..y~~.............fyf,T", "T.T........c............TT,.fy~~f...........TyyT.T", "T.ff.,y........TfTT...........==...Tyy..yT..Tfy.,T", "TTTfr.....ff.frff..fT.........==.....T.f,T.......T", "TTT..,......T.yf..Tyf.........~~T.T.r.ff.f...c.,yT", "T..,T,..fTf,T.T..,T,f........,~~..T..Tf.T.f....yyT", "T,fT___..T.T,.f.r..T.........f~~T.T.y....fTTT.f,.T", "TTy.___.fy..y.,T.yTT..........~~f..y.T,fyT.Tr.TT.T", "T__________________________...~~.................T", "T___PP________________________~~_________________T", "wwwwPPwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwPPwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"],chests:{},
   npcs:[{x:23,y:26,kind:'kumiko',zkumi:1,pt:'kumiko',cond:'mgKill'},{x:25,y:27,kind:'sailor',name:'パイロット',airship:'Z'},{x:6,y:30,kind:'c5',name:'いかだの じいさん',raft:'ZI'},
    {x:21,y:28,kind:'c6',name:'ラジマニア',lines:['ついに きたよ Z国！ ここの ミャリンボは けいけんちが とんでもないんだ！','それと……みなみの はなれこじまには、かみさまが いるって うわさだよ。']},
    {x:26,y:29,kind:'c3',name:'たんけんか',lines:['この みつりんの いきものは みんな さいきょうクラスだ。\nちょっとでも きを ぬくと くわれるぞ。','しかし トラみたいな やつが「チーター」を なのっていたのは なんだったんだ……']}]},
  ZI:{name:'Z国 はなれこじま',theme:'isle',enc:0,map:["wwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwww_wwwwwwwwww", "wwwwwwwp..XXX..pwwwwww", "wwwwww_........._wwwww", "wwwww__..S......__wwww", "wwww___p.......p___www", "wwww___.........___www", "www________._______www", "wwww_T_____._____T_www", "wwww_______._______www", "wwwww______.____T_wwww", "wwwwwwT____._____wwwww", "wwwwwww____.____wwwwww", "wwwwwwwwwwwPwwwwwwwwww", "wwwwwwwwwwwPwwwwwwwwww"],chests:{},
-  npcs:[{x:11,y:4,kind:'chunisN',name:'？？？',chunis:1,ncond:'chunisD'},{x:12,y:13,kind:'c5',name:'いかだの じいさん',raft:'Z'}]},
+  npcs:[{x:11,y:4,kind:'chunisN',name:'？？？',chunis:1},{x:12,y:13,kind:'c5',name:'いかだの じいさん',raft:'Z'}]},
  A1:{out:1,name:'A国 アワニわん',theme:'beach',enc:.03,rare:.01,'G':{to:'S1',x:1,y:10,dir:'right'},groups:[['aoraji2'],['kanisoi2'],['wanisoi'],['shark'],['aoraji2','kanisoi2'],['wanisoi','aoraji2'],['shark','kanisoi2']],
   map:["wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwYwwwwwwwww", "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwPwwwwwwwww", "wwffwfwwfwfwwwwwwwwffwfwwwwfwwwfwfwwwfPffwwwwwww", "^^fffffffffffffffffffffffffwwwwwffffffffffffff^^", "^^___T______c____X__A__A__r_www_______T_c_____^^", "^^____________T__X_________Xwww_____________T_^^", "^^_______________X_________X_w________________^^", "^C___________r_____________X__________________G^", "^^_____r_________X_________________r______r___^^", "^^_________T_____X_________X___T_______r______^^", "^^,r,,,,,T,,,,,,,,,,,A,,,,,X,,,,,T,,,S,,,,,,,,^^", "^^,,,,T,,,,,,,,T,,,,,,,,A,,X,,c,,,,,,,,,,T,,,,^^", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"],
   chests:{'12,5':{rand:1},'30,12':{rand:1},'40,5':{rand:1}},
@@ -1794,7 +1801,7 @@ function buildBF(st){const Wd=48,Ht=22,wx=[28,33,38][st];const m=[];
  FLOORS.BF.map=m.map(r=>r.join(''));
  FLOORS.BF.npcs=[{x:wx-2,y:6,kind:'bro',name:'ブロコリーへい',lines:st<2?['ここが ぜんせんだ！ カリフラーを たおして たおして たおしまくれ！','たおした かずに おうじて ホテルが うごく。\nぜんせんを おしあげるんだ！']:['やった！ ぜんせんが おしあがった！\nマンホールは すぐ そこだ！']},
   {x:wx-2,y:15,kind:'bro',name:'ブロコリーへい',lines:['ホテルベジタブルの なかへは ちかの マンホールから しか はいれない。','その マンホールは いま ホテルの むこうがわ……\nカリフラーの りょういきに あるんだ。']}];}
-{const EASE={sougetsu:.5,usayorich:.6,admiral:.55,awanizaru:.8,bakapan:.9};if(EN.admiral){EN.admiral.startStr=0;EN.admiral.cauliPow=2;if(EN.admiral.moves.brobro)EN.admiral.moves.brobro.n=1}if(EN.sougetsu&&EN.sougetsu.moves.tide)EN.sougetsu.moves.tide.str=2;if(EN.usayorich){EN.usayorich.rise=.3;if(EN.usayorich.moves.onnen)EN.usayorich.moves.onnen.poison=5}for(const [id,k] of Object.entries(EASE))if(EN[id])EN[id].hp=EN[id].hp.map(v=>Math.round(v*k));
+{const EASE={sougetsu:.5,usayorich:.6,admiral:.55,awanizaru:.8,bakapan:1.05};if(EN.admiral){EN.admiral.startStr=0;EN.admiral.cauliPow=2;if(EN.admiral.moves.brobro)EN.admiral.moves.brobro.n=1}if(EN.sougetsu&&EN.sougetsu.moves.tide)EN.sougetsu.moves.tide.str=2;if(EN.usayorich){EN.usayorich.rise=.3;if(EN.usayorich.moves.onnen)EN.usayorich.moves.onnen.poison=5}for(const [id,k] of Object.entries(EASE))if(EN[id])EN[id].hp=EN[id].hp.map(v=>Math.round(v*k));
  const L2S=new Set();for(const g of [...((FLOORS.L2&&FLOORS.L2.groups)||[]),...((FLOORS.L1&&FLOORS.L1.groups)||[])])for(const id of g)L2S.add(id);for(const id of L2S){const e=EN[id];if(!e||e.boss)continue;e.hp=e.hp.map(v=>Math.round(v*.82));for(const mv of Object.values(e.moves))if(mv.dmg)mv.dmg=Math.max(1,Math.round(mv.dmg*.85))}
  const HVS=new Set();for(const f of ['HV1','HV2','BF'])for(const g of (FLOORS[f]&&FLOORS[f].groups)||[])for(const id of g)if(!L2S.has(id))HVS.add(id);for(const id of HVS){const e=EN[id];if(!e||e.boss)continue;e.hp=e.hp.map(v=>Math.round(v*.9));for(const mv of Object.values(e.moves))if(mv.dmg)mv.dmg=Math.max(1,Math.round(mv.dmg*.85))}}
 {const S=new Set();for(const f of ['L1','L2','HV1','HV2','BF'])for(const g of (FLOORS[f]&&FLOORS[f].groups)||[])for(const id of g)S.add(id);
@@ -1836,7 +1843,7 @@ function sanitize(o){
  const equip=(Array.isArray(o.equip)?o.equip:(Array.isArray(o.relics)?o.relics:[])).filter(r=>EQUIPS[r]).filter((r,i,a)=>a.indexOf(r)===i).slice(0,MAXEQ);
  const p={game:'chunyasu',name:String(o.name||'チュンヤス').slice(0,8),lv,xp:num(o.xp,0,0,1e6),max:num(o.max,42,1,999),hp:0,dz:num(o.dz,0,0,1e8),deck,
   uid:Math.max(num(o.uid,1,1,1e9),...deck.map(c=>c.uid+1)),floor,x,y,dir:['up','down','left','right'].includes(o.dir)?o.dir:'down',grace:4,talk:num(o.talk,0,0,999),
-  opened:Array.isArray(o.opened)?o.opened.filter(s=>typeof s==='string').slice(0,600):[],flags:Object.fromEntries(Object.entries((o.flags&&typeof o.flags==='object')?o.flags:{}).filter(([k,v])=>typeof v==='boolean')),front:num(o.front,0,0,999),
+  opened:Array.isArray(o.opened)?o.opened.filter(s=>typeof s==='string').slice(0,600):[],flags:Object.fromEntries(Object.entries((o.flags&&typeof o.flags==='object')?o.flags:{}).filter(([k,v])=>typeof v==='boolean'||(k.startsWith('bw:')&&Number.isFinite(v)&&v>=0&&v<1000))),front:num(o.front,0,0,999),
   bank:Array.isArray(o.bank)?o.bank.filter(c=>c&&CARDS[c.id]&&CARDS[c.id].g!=='token').map((c,i)=>({uid:num(c.uid,900000+i,1,1e9),id:c.id,up:!!c.up})):[],
   atk:num(o.atk,9+lv,1,999),def:num(o.def,9+lv,1,999),equip,gear:allEq.filter(r=>!equip.includes(r)),
   items:Array.isArray(o.items)?o.items.filter(i=>ITEMS[i]).slice(0,5):[],
@@ -2595,8 +2602,8 @@ async function kajiTalk(){const K=t=>ovMsg(`かじや「${t}」`);
   const ok=await new Promise(res=>{openOv(`<div class="win ovwin"><p class="ovt">${pr}ダイズで きたえますか？</p><div class="cmp">${cardHTML(c)}<span class="arr">▶</span>${cardHTML(cu)}</div><div class="opts row2"><button class="opt" data-a="1">きたえる</button><button class="opt" data-a="0">やめる</button></div></div>`);
    ov.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{sfx('cur');closeOv();res(b.dataset.a==='1')})});
   if(ok){PL.dz-=pr;c.up=true;sfx('lv');FX={type:'flash',t0:now()};await wait(200);FX=null;await K(`カーン！ カーン！\n${CARDS[c.id].name}は ${cname(c)}に なったぜ！`);saveGame()}}}
-async function talkNpc(n){if(n.zb)return zbTalk(n);if(n.zkumi)return zKumikoTalk();if(n.suika)return suikaTalk();if(n.kaji)return kajiTalk();if(n.shain)return shainTalk();if(n.fafa)return fafaTalk();if(n.kumada)return kumadaTalk();if(n.kumiko)return kumikoTalk();if(n.fshark)return fsharkTalk();if(n.unicorn)return unicornTalk();if(n.jiiya)return jiiyaTalk();if(n.raft)return raftTalk(n);if(n.chunis)return chunisTalk();if(n.hellgo)return hellGo();{const cl=PL.flags.clear&&CLEARL[PL.floor+':'+n.x+','+n.y];if(cl){for(const l of cl)await ovMsg(`${n.name||NPCNAME[n.kind]}「${l}」`);return}}if(n.shiten)return shitenTalk(n.shiten);if(n.cardshop)return cardShop();if(n.quest)return questTalk(n);if(n.casino)return casino();if(n.weed!=null)return weedTalk(n);if(n.ore!=null)return oreTalk(n);if(n.armor)return armorTalk();if(n.uranai)return uranaiTalk();if(n.escort)return escortTalk();if(n.ntship)return ntShip();if(n.trial)return trial(n.trial);if(n.setFlag)PL.flags[n.setFlag]=true;if(n.prisoner)return prisonerTalk();if(n.king)return kingTalk();if(n.monkey)return monkeyTalk(n);if(n.airship)return airshipMenu(n.airship);if(n.airport)return airport(n.airport);if(n.shop)return merchant(n.shop);if(n.inn)return innFlow();if(n.bank)return bankFlow();if(n.seirai)return seiraiTalk();if(n.denka)return denkaTalk();if(n.harbor)return sailorTalk();
- for(const l of n.lines)await ovMsg(`${n.name||NPCNAME[n.kind]}「${l}」`,n.pt||(n.kind==='shark'?'shark':null))}
+async function talkNpc(n){if(n.zb)return zbTalk(n);if(n.zkumi)return zKumikoTalk();if(n.suika)return suikaTalk();if(n.kaji)return kajiTalk();if(n.shain)return shainTalk();if(n.fafa)return fafaTalk();if(n.kumada)return kumadaTalk();if(n.kumiko)return kumikoTalk();if(n.fshark)return fsharkTalk();if(n.unicorn)return unicornTalk();if(n.jiiya)return jiiyaTalk();if(n.raft)return raftTalk(n);if(n.chunis)return chunisTalk();if(n.hellgo)return hellGo();{const cl=PL.flags.clear&&CLEARL[PL.floor+':'+n.x+','+n.y];if(cl){for(const l of cl)await ovMsg(`${n.name||NPCNAME[n.kind]}「${l}」`);return}}if(n.shiten)return shitenTalk(n.shiten);if(n.cardshop)return cardShop();if(n.quest)return questTalk(n);if(n.casino)return casino();if(n.weed!=null)return weedTalk(n);if(n.ore!=null)return oreTalk(n);if(n.armor)return armorTalk();if(n.uranai)return uranaiTalk();if(n.escort)return escortTalk();if(n.ntship)return ntShip();if(n.bakaEX)return bakaEXTalk();if(n.trial)return trial(n.trial);if(n.setFlag)PL.flags[n.setFlag]=true;if(n.prisoner)return prisonerTalk();if(n.king)return kingTalk();if(n.monkey)return monkeyTalk(n);if(n.airship)return airshipMenu(n.airship);if(n.airport)return airport(n.airport);if(n.shop)return merchant(n.shop);if(n.inn)return innFlow();if(n.bank)return bankFlow();if(n.seirai)return seiraiTalk();if(n.denka)return denkaTalk();if(n.harbor)return sailorTalk();
+ for(const l of (n.linesF&&PL.flags[n.linesF[0]]?n.linesF[1]:n.lines))await ovMsg(`${n.name||NPCNAME[n.kind]}「${l}」`,n.pt||(n.kind==='shark'?'shark':null))}
 async function cardShop(){const M={name:'カードの おろしや'};
  const mk=(l,n)=>shuffle(l).slice(0,n).map(id=>({id,price:Math.round(cardBuy(id)*1.5/10)*10+rnd(-2,2)*10}));
  const st=[...mk(RARES,4),...mk(UNCS,8),...mk(COMMONS,8)];
@@ -2912,12 +2919,14 @@ const CLEARL={'S1:7,9':['きいたか？ せかいを すくった ゆうしゃ�
 
 async function raftTalk(n){const to=n.raft;const k=await choose(`いかだの じいさん「${to==='ZI'?'みなみの はなれこじまへ いくかね？\nかみさまが すんで おるそうじゃ……':'みつりんへ もどるかね？'}」`,['のせてもらう','やめる']);if(k!==0)return;
  FX={type:'fade',t0:now(),d:500};await wait(550);await warpTo(to,to==='ZI'?11:6,to==='ZI'?13:29,to==='ZI'?'up':'down',to==='ZI'?'いかだで はなれこじまに わたった。\nしんと しずまりかえった しんでんが ある……':'みつりんへ もどってきた。');}
-async function chunisTalk(){const C=l=>ovMsg(`？？？「${l}」`);
+async function chunisTalk(){const C=l=>ovMsg(`${PL.flags.chunisD?'チュニス':'？？？'}「${l}」`);
+ if(PL.flags.chunisD){await C('……また きたか、ちいさき えいゆうよ。');const k=await choose('チュニスが ひかりの やりを かまえた。\nもう いちど いどみますか？',['いどむ','やめる']);if(k!==0){await C('……いつでも くるが よい。');return}await flashTo();startBattle(['chunis'],{bg:'isle',after:chunisWin});return}
  await C('……よくぞ ここまで きた、ちいさき もの。');await C('われは ゆいいつしん チュニス。\nこの せかいの すべてを みまもる もの。');
  await C('おにを はらい、だいずを そろえし ものよ。\nその たましい、わが さばきに たえられるか。');
  const k=await choose('ゆいいつしん チュニスが ひかりの やりを かまえた。\nたたかいますか？',['たたかう','やめる']);if(k!==0){await C('……いつでも くるが よい。');return}
  await flashTo();startBattle(['chunis'],{bg:'isle',after:chunisWin});}
-async function chunisWin(){PL.flags.chunisD=true;PL.grace=3;FX={type:'in',t0:now(),d:800};toField();lock=true;
+async function chunisWin(){const again=PL.flags.chunisD;PL.flags.chunisD=true;PL.grace=3;FX={type:'in',t0:now(),d:800};toField();lock=true;
+ if(again){await ovMsg('チュニス「……みごと。さらに つよく なって まって おるぞ。」');saveGame();lock=false;return}
  await ovMsg('チュニス「……みごと。」');await ovMsg('チュニス「……わが まことの なは、ネシト・チュニス。」');
  await ovMsg('チュニス「ちいさき えいゆうよ……その ちから、ただしく つかうのだぞ……」');
  await ovMsg('チュニスは ひかりの つぶと なって そらへ かえっていった……');saveGame();lock=false;}
@@ -2948,7 +2957,9 @@ async function kumikoTalk(){if(!PL.flags.kumiko){PL.flags.kumiko=true;await KUM(
   else if(i===3){await KUM('ここだけの はなし……クリアごに ひみつの あいてが いるの。');await KUM('【だいまおう】シランしの こうえんに あらわれる「じごくの つかい」に ついていくと たたかえるわ。\nカードを 10まい つかうたびに ターンを おわらされるから、1まいずつが おもい カードで いどんでね。');
    await KUM('【ブロコリー・ロイヤリー】クリアごに ブロコリーおうに はなしかけると しょうぶ できるの。\n1かいの こうげきで 60までしか ダメージが とおらないから、れんぞくこうげきが カギよ。');
    await KUM('【Z国】ブロコリーせいの ひこうせんから いける ジュラの しま。けいけんちが とんでもない ミャリンボ・Zも いるわ。');
-   await KUM('【ゆいいつしん チュニス】Z国の はなれこじまに いる かみさま。Lv50くらいは ほしいわね。\nよわきや どくが きかないうえ、HPの わりあいが チュニスより ひくいと「たましいの さばき」で おおダメージ。\nHPを たかく たもつのが だいじよ！')}
+   await KUM('【ゆいいつしん チュニス】Z国の はなれこじまに いる かみさま。Lv50くらいは ほしいわね。\nよわきや どくが きかないうえ、HPの わりあいが チュニスより ひくいと「たましいの さばき」で おおダメージ。\nHPを たかく たもつのが だいじよ！');
+   await KUM('【バカパン・しんのすがた】クリアごの P国 しれんの いせきの おくで まってるわ。');
+   await KUM('それと とっておき……うらボスは たおすたびに つよく なって もどってくるの。\nでも おなじ あいてを 5かい たおすと、その あいて だけの「きわみの そうび」が てに はいるって うわさよ！')}
   else if(i===4){await KUM('ミャリンボは よく にげるし こうげきを よく よけるの。\nれんぞくこうげきの カードで てかずを ふやすと あてやすいわ。');await KUM('けいけんちは あなたの いまの レベルに あわせて たくさん もらえるの。Z国の ミャリンボ・Zは なんと 2レベルぶん いじょう！')}
   else{await KUM('カードには「どく」「れんげき」「ちから」「ぼうぎょ」「ドロー・マナ」の けいとうが あって、ばしょごとに でやすい けいとうが ちがうの。\nけんきゅうしせつは どく、ブロコリーせいは ちから、P国は れんげき……ってね。');await KUM('ドローで てふだを ふやして、0マナの カードを つなげると いっきに たたみかけられるわ。');await KUM('どくは ブロックを むしして ダメージが はいるし、よわきを かけると うける ダメージが へるの。');await KUM('カードを ながおし すると くわしい せつめいが みられるわよ！')}}}
 async function fsharkTalk(){await FSH('やっぱ シャーク さいこう ラジBAD');
@@ -2988,11 +2999,11 @@ async function zbTalk(n){const nm=EN['zb_'+n.zb].name;await ovMsg(`${nm}「…�
  const k=await choose(`${nm}と たたかう？`,['たたかう','にげる']);if(k!==0)return;await flashTo();
  startBattle(['zb_'+n.zb],{bg:'jura',after:async()=>{ZBN=ZBN.filter(o=>o!==n);PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;await ovMsg(`${nm}は しょうきに もどり、どこかへ きえていった……`);PL.flags.mgKill=true;PL.deck.push({uid:PL.uid++,id:'magatsu',up:false});sfx('lv');await ovMsg('「まがつの かけら」を てにいれた！\n〔ほのおの シャークに わたす きょうか そざい。\nZ国の くみこと カードの こうかんにも つかえる〕');lock=false;saveGame()}})}
 async function suikaTalk(){await ovMsg('……みどりと くろの しまもようの きょじんが たちはだかっている。');await ovMsg('スイカマー「…………」');await ovMsg('スイカマー「ﾎﾞｺﾎﾞｺ ﾆ ｼﾃﾔﾙ」');
- const k=await choose('ぼうりょくの おうと たたかう？（とても きけん）',['たたかう','やめておく']);if(k!==0)return;await flashTo();
+ const w=hbWins('suikamar');if(w)await ovMsg(`スイカマーは たおされるたびに つよく なっている……！（${w}かい げきは）`);const k=await choose('ぼうりょくの おうと たたかう？（とても きけん）',['たたかう','やめておく']);if(k!==0)return;await flashTo();
  startBattle(['suikamar'],{bg:'oni',after:async()=>{PL.flags.suikaD=true;PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;await ovMsg('スイカマーは こなごなに くだけちった……');await ovMsg('あたりに あまい かおりが ただよっている……');lock=false;saveGame()}})}
 async function jiiyaBossTalk(){for(const l of ['なんで どこにでも いるのかって…？','おまえを かんしし','そして','ころすためだよ'])await ovMsg(`ふくみみ サイクリングじいや「${l}」`,'jiiya');
  await flashTo();startBattle(['jiiyaB'],{bg:'city',after:async()=>{PL.flags.jiiyaD=true;PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;await ovMsg('ふくみみ サイクリングじいや「……ﾁﾘﾝ……」');await ovMsg('じいやは じてんしゃに のって さっていった……');lock=false;saveGame()}})}
-async function jiiyaTalk(){if(PL.flags.jiiyaD){await ovMsg('ふくみみ サイクリングじいや「ﾁﾘﾝﾁﾘｰﾝ」','jiiya');return}
+async function jiiyaTalk(){if(PL.flags.jiiyaD){await ovMsg('ふくみみ サイクリングじいや「ﾁﾘﾝﾁﾘｰﾝ」','jiiya');const k=await choose('じいやの めが あやしく ひかった……\nたたかいますか？',['たたかう','やめる']);if(k!==0)return;await flashTo();startBattle(['jiiyaB'],{bg:'city',after:async()=>{PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;await ovMsg('ふくみみ サイクリングじいや「……ﾁﾘﾝ……」');lock=false;saveGame()}});return}
  PL.flags['jy:'+PL.floor]=true;const all=['S1','BT','RV','NT','CP','A1'].every(f=>PL.flags['jy:'+f]);if(all)return jiiyaBossTalk();await ovMsg('ふくみみ サイクリングじいや「ﾁﾘﾝﾁﾘｰﾝ」','jiiya');if(Math.random()<.4)await ovMsg('ふくみみ サイクリングじいや「……。」','jiiya');}
 
 const GIFT={B3:{card:'ironwave',boss:'レインボーラジは よわきや むぼうびを はじく まくを もっています。\nこうげきと ぼうぎょを いっしょに できる カードが べんりですよ。'},
@@ -3019,7 +3030,7 @@ async function fafaTalk(){const FA=l=>ovMsg(`ファファファファッくん�
   ov.querySelector('[data-cancel]').onclick=()=>{sfx('cur');closeOv();res()}};render()});
  await FA('おひさしぶりです');}
 const FAFA={};
-const KTIPS=['デッキの まいすうが すくないほど、つよい カードを ひく かくりつが あがります。\nこれを「デッキあっしゅく」と いいます。','いらない カードは しょうにんに うったり、カードあずかりやに あずけて デッキから ぬきましょう。\nはじめの スラッシュや ガードも、つよい カードが そろったら ぬいて かまいません。','「つかいきり」の カードは、たたかいの なかで デッキを ちいさく します。\nこれも りっぱな デッキあっしゅく です。','ひいた カードが つよくても、マナが たりなければ つかえません。\nマナ0や マナを ふやす カードで テンポを つくりましょう。','パワーカードは はやく だすほど とく。\nドローカードと くみあわせて、はやい ターンに だしましょう。','どくは ブロックを むしして ダメージが はいります。かたい てきに よく ききます。','むぼうびを かけてから おおきな こうげき。じゅんばんが だいじです。','よわきを かけると うける ダメージが へります。ボスの おおわざの まえに どうぞ。','ブロックは つぎの じぶんの ターンで きえます。\nてきの あたまの マークを みて、ひつような ぶんだけ はりましょう。','カードには けいとうが あります。そろえると シナジーが うまれます。\nばしょごとに でやすい けいとうが ちがうんですよ。','レベルアップで きたえる カードは、いちばん よく つかう カードを えらぶのが コツです。','カードを ながおし すると くわしい せつめいが みられます。\n……あれも わたしが つくりました。'];
+const KTIPS=['デッキの まいすうが すくないほど、つよい カードを ひく かくりつが あがります。\nこれを「デッキあっしゅく」と いいます。','いらない カードは しょうにんに うったり、カードあずかりやに あずけて デッキから ぬきましょう。\nはじめの スラッシュや ガードも、つよい カードが そろったら ぬいて かまいません。','「じょがい」の カードは、たたかいの なかで デッキを ちいさく します。\nこれも りっぱな デッキあっしゅく です。','ひいた カードが つよくても、マナが たりなければ つかえません。\nマナ0や マナを ふやす カードで テンポを つくりましょう。','パワーカードは はやく だすほど とく。\nドローカードと くみあわせて、はやい ターンに だしましょう。','どくは ブロックを むしして ダメージが はいります。かたい てきに よく ききます。','むぼうびを かけてから おおきな こうげき。じゅんばんが だいじです。','よわきを かけると うける ダメージが へります。ボスの おおわざの まえに どうぞ。','ブロックは つぎの じぶんの ターンで きえます。\nてきの あたまの マークを みて、ひつような ぶんだけ はりましょう。','カードには けいとうが あります。そろえると シナジーが うまれます。\nばしょごとに でやすい けいとうが ちがうんですよ。','レベルアップで きたえる カードは、いちばん よく つかう カードを えらぶのが コツです。','カードを ながおし すると くわしい せつめいが みられます。\n……あれも わたしが つくりました。'];
 async function kumadaTalk(){const KU=l=>ovMsg(`くまだ ささき「${l}」`,'kumada');
  if(!PL.flags.kumada){PL.flags.kumada=true;await KU('どうも');await KU('おにそいカードカンパニー しゃちょうです');await KU('バトルに つかう カードは わたしが かいはつしました')}
  for(;;){const k=await choose('くまだ ささき「なにか ききたい ことは？」',['カードの コツを きく','デッキを みてもらう','やめる'],'kumada');
@@ -3188,6 +3199,8 @@ async function trial(k){
  if(k===1){await ovMsg('アワニザル「アワニ。アワニアワニ……アワニアワニアワニ！！」');await flashTo();startBattle(['awanizaru'],{bg:'arena',after:()=>trialWin(1)});}
  else if(k===2){await ovMsg('サルの むれ「おはー！ なぱかぶ！ あーまーぶーす！」\nぞろぞろと サルが あつまってきた…… 10ぴき いる！');await flashTo();startBattle(['saru','saru','saru'],{bg:'arena',waves:[['saru','saru','saru'],['saru','saru','saru','saru']],after:()=>trialWin(2)});}
  else{await ovMsg('バカパン「…………」');await ovMsg('ものすごい いあつかんだ……！');await flashTo();startBattle(['bakapan'],{bg:'arena',after:()=>trialWin(3)});}}
+async function bakaEXTalk(){await ovMsg('バカパン「…………」');await ovMsg('バカパン「ウホ。ウホホ……ウホーーーッ！！」\nバカパンの からだが まっかに もえあがった……！');const w=hbWins('bakapanEX');if(w)await ovMsg(`バカパンは まけるたびに きたえなおしている……！（${w}かい げきは）`);
+ const k=await choose('しんの すがたの バカパンと たたかう？',['たたかう','やめる']);if(k!==0)return;await flashTo();startBattle(['bakapanEX'],{bg:'arena',after:async()=>{PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;await ovMsg('バカパン「ウホ……。」\nバカパンは まんぞくげに むねを たたいた。');saveGame();lock=false}})}
 async function trialWin(k){PL.flags['t'+k]=true;PL.grace=3;FX={type:'in',t0:now(),d:500};toField();lock=true;
  if(k<3)await ovMsg(`だい${k}かんもん とっぱ！`);
  else{await ovMsg('だい3かんもん とっぱ！\nしれんの いせきの おくで みずの だいずが ひかっている。');await mizuScene();
@@ -3228,7 +3241,7 @@ function pickFrom(title,cards){return new Promise(res=>{
  openOv(`<div class="win ovwin"><p class="ovt">${esc(title)}</p><div class="cgrid">${cards.map((c,i)=>cardHTML(c,{tag:'button',attr:`data-i="${i}"`})).join('')}</div></div>`);
  ov.querySelectorAll('button.card').forEach(b=>b.onclick=()=>{sfx('cur');closeOv();res(+b.dataset.i)});});}
 
-const KW=[['アーティファクト','よわき・むぼうび などの わるい こうかを 1かい ふせぐ'],['さいしょの てふだ','たたかいの 1ターンめに かならず ひく'],['どく','ターンの はじめに どくの かずだけ ダメージを うけ、1 へる'],['よわき','あたえる ダメージが 25% へる（ターンごとに 1 へる）'],['むぼうび','うける ダメージが 50% ふえる（ターンごとに 1 へる）'],['ちから','こうげきカードの ダメージが その ぶん ふえる'],['みのこなし','ブロックを える カードの ブロックが ふえる'],['ブロック','ダメージを ふせぐ。じぶんの ターンの はじめに きえる'],['つかいきり','つかうと この たたかいの あいだ デッキから なくなる'],['ほじ','ターンの おわりに すてずに てふだに のこる'],['パワー','つかうと たたかいの あいだ ずっと こうかが つづく'],['ターンの おわりに きえる','てふだに のこしたまま ターンを おわると つかいきりに なる'],['ひこう','ひこうの ついた てき ぜんいんの HPが ひこうの ぶん へる'],['X','のこりの マナを すべて つかい、その かずだけ こうかが でる'],['けいに','その けいとうの てきへの ダメージが ふえる（「てき」の なまえの よこに けいとうが でる）'],['きたえる','カードが つよく なる（＋）'],['マナ','カードを つかう ための ちから。まいターン 3 もどる'],['やまふだ','これから ひく カードの やま'],['すてふだ','つかった カードの やま。やまふだが なくなると まぜて もどる'],['かわす','つぎに うける こうげきを 1かい むこうに する'],['じょうたい','つかえない カード。てきに まぜられる']];
+const KW=[['アーティファクト','よわき・むぼうび などの わるい こうかを 1かい ふせぐ'],['さいしょの てふだ','たたかいの 1ターンめに かならず ひく'],['どく','ターンの はじめに どくの かずだけ ダメージを うけ、1 へる'],['よわき','あたえる ダメージが 25% へる（ターンごとに 1 へる）'],['むぼうび','うける ダメージが 50% ふえる（ターンごとに 1 へる）'],['ちから','こうげきカードの ダメージが その ぶん ふえる'],['みのこなし','ブロックを える カードの ブロックが ふえる'],['ブロック','ダメージを ふせぐ。じぶんの ターンの はじめに きえる'],['じょがい','つかうと この たたかいの あいだ デッキから なくなる'],['ほじ','ターンの おわりに すてずに てふだに のこる'],['パワー','つかうと たたかいの あいだ ずっと こうかが つづく'],['ターンの おわりに きえる','てふだに のこしたまま ターンを おわると じょがい される'],['ひこう','ひこうの ついた てき ぜんいんの HPが ひこうの ぶん へる'],['X','のこりの マナを すべて つかい、その かずだけ こうかが でる'],['けいに','その けいとうの てきへの ダメージが ふえる（「てき」の なまえの よこに けいとうが でる）'],['きたえる','カードが つよく なる（＋）'],['マナ','カードを つかう ための ちから。まいターン 3 もどる'],['やまふだ','これから ひく カードの やま'],['すてふだ','つかった カードの やま。やまふだが なくなると まぜて もどる'],['かわす','つぎに うける こうげきを 1かい むこうに する'],['じょうたい','つかえない カード。てきに まぜられる']];
 function cardDetail(c,buy){const d=CARDS[c.id],p=cp(c),tx=ctext(p,false,c)+' '+TYPEJP[d.t]+(p.xcost?' X':'');const kws=KW.filter(([k])=>tx.includes(k));
  return new Promise(res=>{openOv(`<div class="win ovwin"><p class="ovt">カードの くわしい せつめい</p><div class="one">${cardHTML(c,{cls:'big',src:1})}</div>
   <p class="sub" style="margin-top:8px">${esc(ctext(p,false,c))}</p><p class="note">けいとう：${ARCHJP[archOf(c.id)]}</p>${!c.up&&d.g!=='token'&&d.g!=='curse'?`<p class="note">きたえると：${esc(ctext(d.u,false,{...c,up:true}))}</p>`:''}
@@ -3347,10 +3360,16 @@ function bgShip(t){const g=ctx.createLinearGradient(0,0,0,40);g.addColorStop(0,'
  ctx.fillStyle='#6a3c10';ctx.fillRect(0,38,W,8);ctx.fillStyle='#8a5424';ctx.fillRect(0,38,W,2);for(let x=4;x<W;x+=20)ctx.fillRect(x,40,3,6)}
 const HX=212,HY=100;
 let TMPUID=-1;const tmpCard=(id,up)=>({uid:TMPUID--,id,up:!!up||!!(typeof B!=='undefined'&&B&&B.h&&B.h.masterReal&&CARDS[id].g!=='token'||(typeof B!=='undefined'&&B&&B.h&&B.h.masterReal&&['smite','safety','throughv','insight','miracle','expunger'].includes(id)))});
-function mkEnemy(id,sc){const d0=EN[id];const d=d0.clone?{...d0,moves:{...d0.moves}}:d0;const hp=Math.round(rnd(d.hp[0],d.hp[1])*sc);return{id,def:d,name:d.name,hp,max:hp,block:0,str:d.startStr||0,weak:0,vuln:0,poison:0,mark:0,wail:0,art:d.art||0,sc,mi:-1,last:[],dead:false}}
+const HIDDEN_BOSS=['chunis','daimaou','brokingb','suikamar','jiiyaB','bakapanEX'];
+const HB_HP=1.5,HB_ATK=1.3;
+const HB_REWARD={daimaou:'jigokuame',brokingb:'brobonkan',bakapanEX:'icebaka',chunis:'chunyasuF',suikamar:'armak'};
+function hbWins(id){return PL&&PL.flags?(PL.flags['bw:'+id]||0):0}
+function mkEnemy(id,sc){const d0=EN[id];const hb=HIDDEN_BOSS.includes(id),n=hb?hbWins(id):0,hm=Math.pow(HB_HP,n);const d=(d0.clone||hb)?{...d0,moves:{...d0.moves}}:d0;
+ if(n>0){d.name=d0.name+' ★'+n;d.xp=Math.round(d0.xp*hm);d.dz=Math.round(d0.dz*hm);if(d0.hitCap){d.hitCap=Math.round(d0.hitCap*hm);if(d.gim)d.gim=d.gim.replace(String(d0.hitCap),String(d.hitCap))}}
+ const hp=Math.round(rnd(d.hp[0],d.hp[1])*sc*hm);return{id,def:d,name:d.name,hp,max:hp,pw:Math.pow(HB_ATK,n),hcm:hm,block:0,str:d.startStr||0,weak:0,vuln:0,poison:0,mark:0,wail:0,art:d.art||0,sc,mi:-1,last:[],dead:false}}
 function startBattle(ids,opt){opt=opt||{};const LOSE=opt.lose||null;const F=FLOORS[PL.floor]||{};const sc=opt.bg?1:(F.scale||1);
  B={enemies:ids.map(id=>mkEnemy(id,sc)),draw:shuffle(PL.deck.map(c=>({...c}))),discard:[],hand:[],exh:[],energy:3,sc,
-  h:{hp:PL.hp,max:PL.max,block:0,weak:0,vuln:0,poison:0,str:0,tstr:0,nextBlock:0,nextEnergy:0,vigor:has('akabeko')?8:0,dex:0,demon:0,fumes:0,afterimg:0,cuts:0,acc:0,burst:0,dup:0,nextDraw:0},
+  h:{hp:PL.hp*hpM(),max:PL.max*hpM(),block:0,weak:0,vuln:0,poison:0,str:0,tstr:0,nextBlock:0,nextEnergy:0,vigor:has('akabeko')?8:0,dex:0,demon:0,fumes:0,afterimg:0,cuts:0,acc:0,burst:0,dup:0,nextDraw:0},
   sel:null,busy:true,pops:[],killed:[],turn:0,claw:0,lastType:null,discarded:false,reboundNext:false};
  {const inn=B.draw.filter(c=>cp(c).innate);B.draw=B.draw.filter(c=>!cp(c).innate).concat(inn)}
  B.boss=B.enemies.some(e=>e.def.boss);B.bg=opt.bg||F.theme||'cave';B.after=opt.after||null;B.lose=LOSE;
@@ -3371,13 +3390,13 @@ const STRCAP_MID=['admiral','awanizaru','bakapan','uranai','utsu'],STRCAP_LATE=[
 function strCap(e){if(!e.def.boss)return 3;if(STRCAP_EX.includes(e.id))return 99;if(STRCAP_LATE.includes(e.id))return 10;if(STRCAP_MID.includes(e.id))return 6;if(['rainbow','sougetsu','usayorich'].includes(e.id))return 4;return 6}
 function strGain(e,n){if(!e.def.boss||STRCAP_EX.includes(e.id))return n;e.strUses=(e.strUses||0)+1;return e.strUses===1?Math.min(n,4):Math.max(1,Math.ceil(n/3))}
 function strPer(e,h){const s=e.str-e.wail;if(s<=0||!h||h<5)return s;return h>=10?Math.ceil(s/4):Math.ceil(s/2)}
-const BURST={sougetsu:22,usayorich:32,admiral:40,awanizaru:52,bakapan:64,uranai:70,utsu:85};
+const BURST={sougetsu:22,usayorich:32,admiral:40,awanizaru:52,bakapan:72,uranai:70,utsu:85};
 function calcE(base,e,h){let r0=calcE0(base,e,h);if(PL)for(const id of PL.equip){const q=EQUIPS[id];if(q&&q.resist&&e.def.fam===q.resist[0])r0=Math.floor(r0*q.resist[1])}const cap=BURST[e.id];return cap?Math.min(r0,Math.floor(cap*1.1/Math.max(1,h||1))):r0}
-function calcE0(base,e,h){let d=(B.fleeFail?Math.ceil(base*.3):0)+Math.round(base*e.sc)+strPer(e,h)+(e.def.cauliPow?e.def.cauliPow*[...B.hand,...B.draw,...B.discard].filter(c=>c.id==='karifura').length:0)+(e.def.moon&&B.h.hp<e.hp?e.def.moon:0);if(e.weak>0)d=Math.floor(d*.75);if(B.h.vuln>0)d=Math.floor(d*1.5);return Math.max(0,d)}
+function calcE0(base,e,h){let d=(B.fleeFail?Math.ceil(base*.3):0)+Math.round(base*e.sc*(e.pw||1))+strPer(e,h)+(e.def.cauliPow?e.def.cauliPow*[...B.hand,...B.draw,...B.discard].filter(c=>c.id==='karifura').length:0)+(e.def.moon&&B.h.hp<e.hp?e.def.moon:0);if(e.weak>0)d=Math.floor(d*.75);if(B.h.vuln>0)d=Math.floor(d*1.5);return Math.max(0,d)}
 function fxPos(t){if(inBattle()&&t===B.h)return[HX,HY-6];return[t.cx||HX,(t.cy||HY)-4]}
 function bigCheck(e){e.chg=null;if(B&&(B.multiNow||B.lose))return;const m=e.intent;if(!m||!m.dmg||!B||!B.h||e.dead)return;const h=m.hits||1;let tot;try{tot=calcE(m.dmg,e,h)*h}catch(_){return}
  const mx=B.h.max||PL.max;if(!((e.def.boss&&tot>=Math.max(30,mx*.3))||tot>=mx*.45))return;
- const lv=PL?PL.lv:5;const tier=STRCAP_EX.includes(e.id)||/^zb_|suikamar|jiiyaB/.test(e.id)?2:STRCAP_LATE.includes(e.id)?1:e.id==='admiral'?3:0;const early=['rainbow','sougetsu','usayorich'].includes(e.id);const sh=Math.round((8+lv*1.3)*(e.def.boss?(early?2.05:[1.8,2.16,3.4,2.6][tier]):1.2));e.chg={need:e.def.boss?(early?5:[4,5,6,5][tier]):3,h:0,sh,perCard:tier>0};e.block+=sh;
+ const lv=PL?PL.lv:5;const tier=STRCAP_EX.includes(e.id)||/^zb_|suikamar|jiiyaB|bakapanEX/.test(e.id)?2:STRCAP_LATE.includes(e.id)?1:e.id==='admiral'?3:0;const early=['rainbow','sougetsu','usayorich'].includes(e.id);const sh=Math.round((8+lv*1.3)*(e.hcm||1)*(e.def.boss?(early?2.05:[2.45,2.9,4.6,3.5][tier]):1.2));e.chg={need:e.def.boss?(early?5:[4,5,6,5][tier]):3,h:0,sh,perCard:tier>0};e.block+=sh;
  try{popE(e,'ためている…！','#ff9a40');addFx('shield',...fxPos(e))}catch(_){} }
 function bigBreak(t){t.chg=null;t.intent={name:'ダウン',down:1};t.vuln=(t.vuln||0)+1;try{popE(t,'ブレイク！ ダウン！','#f8d048');const [px,py]=fxPos(t);addFx('burst',px,py);addFx('break',px,py);sfx('lv');B.flashCol={c:'#fff0a0',t0:now()};showName(t.name+'の おおわざを くずした！')}catch(_){} }
 function hit(t,d){const had=t.block,b=Math.min(t.block,d);t.block-=b;d-=b;t.hp=Math.max(0,t.hp-d);
@@ -3577,7 +3596,7 @@ function drawDanger(t){if(!B||B.enemyPhase||scene!=='battle'||!B.h)return;const 
 function hint(s){const h=$('#bHint');if(h)h.textContent=s||''}
 function stTxt(o){const a=[];if(o.dex)a.push(`<span class="cyan">みのこなし+${o.dex}</span>`);if(o.demon)a.push(`<span class="gold">おに+${o.demon}</span>`);if(o.fumes)a.push(`<span class="pur">ガス${o.fumes}</span>`);if(o.afterimg)a.push(`<span class="cyan">ざんぞう</span>`);if(o.cuts)a.push(`<span class="red">きず${o.cuts}</span>`);if(o.acc)a.push(`<span class="gold">せいみつ</span>`);if(o.burst)a.push(`<span class="gold">ぜんりょく${o.burst}</span>`);if(o.dup)a.push(`<span class="gold">ふたご</span>`);if(o.dodge)a.push(`<span class="cyan">かわす${o.dodge}</span>`);if(o.atkBlock)a.push(`<span class="cyan">しき${o.atkBlock}</span>`);if(o.retainAll)a.push(`<span class="gold">むい</span>`);if(o.poison)a.push(`<span class="pur">どく${o.poison}</span>`);if(o.weak)a.push(`<span class="org">よわき${o.weak}</span>`);if(o.vuln)a.push(`<span class="red">むぼうび${o.vuln}</span>`);const st=(o.str||0)+(o.tstr||0);if(st)a.push(`<span class="gold">ちから${st>0?'+':''}${st}</span>`);if(o.vigor)a.push(`<span class="gold">いきおい+${o.vigor}</span>`);return a.join(' ')}
 function effCost(c){const p=cp(c);if(p.xcost)return 0;if(B.freeTurn||c.free||c.zero)return 0;if(B.h.corrupt&&CARDS[c.id].t==='skl')return 0;if(B.h.swivel&&CARDS[c.id].t==='atk')return 0;
- let v=p.cost;if(p.bfb)v-=B.hurtN||0;if(p.evis)v-=B.discN||0;if(p.hurtCost)v+=B.hurtN||0;if(p.forceField)v-=B.powN||0;if(c.sl)v-=c.sl;if((c.enl===B.turn||c.enlP)&&v>1)v=1;return Math.max(0,v)}
+ let v=p.cost;if(p.bfb)v-=B.hurtN||0;if(p.evis)v-=B.discN||0;if(p.hurtCost)v+=B.hurtN||0;if(p.forceField)v-=B.powN||0;if(c.sl)v-=c.sl;if((c.enl===B.turn||c.enlP)&&v>1)v=1;if(has('armak'))v--;return Math.max(0,v)}
 function playable(c){const p=cp(c);if(p.unplayable)return false;if(has('velvet')&&(B.tPlayed||0)>=6)return false;if(p.finale&&B.draw.length)return false;if(B.h.entangled&&CARDS[c.id].t==='atk')return false;if(effCost(c)>B.energy)return false;if(p.clash&&B.hand.some(x=>x!==c&&CARDS[x.id].t!=='atk'))return false;return true}
 function renderBattleUI(){if(scene!=='battle'||!$('#bHand'))return;const h=B.h;
  $('#bNames').innerHTML=B.enemies.map((e,i)=>e.dead?'':`<button class="opt ${B.sel!==null?'tgt':''}" data-e="${i}">${e.name}${e.def.fam?`<span class="dim" style="font-size:11px"> ${FAMJP[e.def.fam]}</span>`:''}</button>`).join('');
@@ -3585,7 +3604,7 @@ function renderBattleUI(){if(scene!=='battle'||!$('#bHand'))return;const h=B.h;
  $('#bStat').innerHTML=`<p>${esc(PL.name)} <span class="dim">Lv${PL.lv}</span></p><p>HP <span class="${pct<30?'red':''}">${h.hp}</span>/${h.max}</p><div class="bar ${pct<30?'low':''}"><i style="width:${pct}%"></i></div>
   <p>マナ <span class="en">${'◆'.repeat(Math.max(0,Math.min(B.energy,8)))}${'◇'.repeat(Math.max(0,(has('moonfang')?4:3)-B.energy))}</span>${B.energy>(has('moonfang')?4:3)?` <span class="gold">${B.energy}</span>`:''}</p>${h.nextBlock||h.nextEnergy?`<p class="dim" style="font-size:12px">つぎのターン ${h.nextBlock?'ブロック'+h.nextBlock:''} ${h.nextEnergy?'マナ+'+h.nextEnergy:''}</p>`:''}<p>${h.block?`<span class="cyan">ブロック${h.block}</span> `:''}${stTxt(h)}</p>`;
  $('#bHand').innerHTML=B.hand.map((c,i)=>cardHTML(c,{tag:'button',cost:effCost(c),attr:`data-i="${i}" aria-label="${cname(c)} マナ${effCost(c)} ${ctext(cp(c),false,c)}"`,cls:(playable(c)?'':'no ')+(B.sel===i?'sel':'')+(B.tq&&B.tq.includes(c)?' q':'')})).join('');
- $('#bPiles').textContent=`やまふだ ${B.draw.length}　すてふだ ${B.discard.length}${B.exh.length?`　つかいきり ${B.exh.length}`:''}`;
+ $('#bPiles').textContent=`やまふだ ${B.draw.length}　すてふだ ${B.discard.length}${B.exh.length?`　じょがい ${B.exh.length}`:''}`;
  $('#bEnd').disabled=B.busy;const bi=$('#bItem');if(bi)bi.disabled=B.busy||!PL.items.length;const bf=$('#bFlee');if(bf)bf.disabled=B.busy;}
 function reshuffle(){if(!B.draw.length&&B.discard.length){B.draw=shuffle(B.discard);B.discard=[];if(has('sundial')){B.sund=(B.sund||0)+1;if(B.sund%3===0){B.energy+=2;popH('ひどけい マナ+2','#f8d048')}}}}
 function drawCards(n){if(B.noDraw)return;B.pendDraw=0;for(let i=0;i<n+(B.pendDraw||0);i++){reshuffle();if(!B.draw.length)break;const c=B.draw.pop();
@@ -3605,6 +3624,7 @@ async function startTurn(){B.enemyPhase=false;B.turn++;B.h.entangled=B.h.entangl
   if(has('mamemori')){B.h.block+=3;popH('+3','#7cd8ff');fired.push('mamemori')}
   if(has('chinoshizuku')&&B.h.hp<B.h.max){B.h.hp=Math.min(B.h.max,B.h.hp+2);fired.push('chinoshizuku')}
   if(has('kaze')&&B.h.hp<B.h.max){const h=Math.min(3,B.h.max-B.h.hp);B.h.hp+=h;pop(HX,HY+4,'+'+h,'#7cf07c');fired.push('kaze')}
+  if(has('jigokuame')){for(const e of alive()){const d=Math.min(999,e.hp);e.hp-=d;popE(e,d,'#ff5030');const [px,py]=fxPos(e);addFx('slash',px,py);if(e.hp<=0)kill(e)}addFx('burst',96,60,'#ff5030');B.flashCol={c:'#ff6040',t0:now()};fired.push('jigokuame');if(!alive().length)setTimeout(()=>{if(B&&!B.done&&!alive().length)victory()},900)}
   if(has('sharkedge')){for(const e of alive()){e.vuln+=1;popE(e,'むぼうび','#ff7a6a')}fired.push('sharkedge')}
   if(has('lantern')){B.energy++;fired.push('lantern')}
   if(has('kaban')){extra=1;fired.push('kaban')}
@@ -3636,6 +3656,7 @@ async function startTurn(){B.enemyPhase=false;B.turn++;B.h.entangled=B.h.entangl
   if(has('moonfang')){for(let q=0;q<2;q++)B.draw.splice(rnd(0,B.draw.length),0,tmpCard('kega'));fired.push('moonfang')}
  }
  if(has('suzu')&&B.turn%3===0){B.energy++;fired.push('suzu')}
+ if(has('brobonkan'))B.energy+=4;if(has('icebaka'))extra+=5;
  if(has('velvet'))B.energy++;if(B.hgN){B.energy+=B.hgN;popH('はんげき マナ+'+B.hgN,'#f8d048');B.hgN=0}if(has('kaminohane')&&B.turn>1){B.energy++;const h=Math.min(5,B.h.max-B.h.hp);B.h.hp+=h}if(has('royalbro')&&B.turn>1){B.h.block+=8;B.h.str+=1}if(has('suikanotane'))B.energy++;if(has('suikanotane')||has('jiiyabell'))extra+=1;B.kwN=0;if(has('markofpain'))B.energy++;if(B.boss&&has('slavers'))B.energy++;
  if(has('artofwar')&&B.turn>1&&!B.atkLast){B.energy++;fired.push('artofwar')}B.atkLast=0;B.kiteUsed=0;B.necroUsed=0;
  if(has('brimstone')){B.h.str+=2;for(const e of alive())e.str+=1}
@@ -3653,7 +3674,7 @@ async function startTurn(){B.enemyPhase=false;B.turn++;B.h.entangled=B.h.entangl
  if(B.h.brutal){B.h.hp=Math.max(1,B.h.hp-B.h.brutal);popH('-'+B.h.brutal,'#ff7a6a');extra+=B.h.brutal}
  if(has('wedge')&&B.turn===2){B.h.block+=14;popH('+14','#7cd8ff');fired.push('wedge')}
  for(const e of alive())if(e.def.shiftGim){const G=[['moon',8,'つきの ちから：HPが じぶんより ひくい あいてへの こうげき+8'],['thorns',8,'とげ：こうげきされると 8ダメージ'],['mock',25,'ちょうはつ：25みまんの ダメージで ちから+1'],['enrage',2,'バカぢから：スキルで ちから+2'],['powerStr',2,'おにの めざめ：パワーで ちから+2'],['beat',8,'こどう：カードを つかうたび 8ダメージ'],['judge',8,'えんまちょう：8まいめで ターンが おわる'],['hitCap',150,'はがねの からだ：1かいの ダメージ さいだい150']];
-  for(const g of G)delete e.def[g[0]];const pk=shuffle(G.slice()).slice(0,2);for(const g of pk)e.def[g[0]]=g[1];e.art=Math.max(e.art||0,1);e.def.gim='ぼうりょくの おう（1ターン3かい こうどう）／'+pk.map(g=>g[2]).join('／');hint('【スイカマー】'+pk.map(g=>g[2]).join('／'))}
+  for(const g of G)delete e.def[g[0]];const pk=shuffle(G.slice()).slice(0,2);for(const g of pk)e.def[g[0]]=g[0]==='hitCap'?Math.round(g[1]*(e.hcm||1)):g[1];e.art=Math.max(e.art||0,1);const gt=pk.map(g=>g[0]==='hitCap'?g[2].replace('150',String(e.def.hitCap)):g[2]);e.def.gim='ぼうりょくの おう（1ターン3かい こうどう）／'+gt.join('／');hint('【スイカマー】'+gt.join('／'))}
  if(B.h.strDouble&&B.turn>1){for(let q=0;q<B.h.strDouble;q++)B.h.str=Math.max(1,B.h.str*2);popH('ちから '+B.h.str,'#f8d048')}
  if(B.h.demon){B.h.str+=B.h.demon;popH('ちから+'+B.h.demon,'#f8d048')}
  if(B.h.fumes)for(const e of alive()){e.poison+=B.h.fumes;popE(e,'どく'+B.h.fumes,'#cf9cff')}
@@ -3839,8 +3860,8 @@ async function resolveCard(c,tgt,opt){if(B){B.enemies.forEach(o=>o.mocked=false)
  if(p.upg){const cand=B.hand.filter(x=>!x.up&&CARDS[x.id].g!=='token');
   if(p.upg===2)cand.forEach(x=>x.up=true);else if(cand.length){const x=await pickFrom('きたえる カードを えらんでください（この たたかいの あいだ）',cand);cand[x].up=true}
   if(cand.length)sfx('lv')}
- if(p.exRand&&B.hand.length){const x=pick(B.hand);B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x);hint(`${cname(x)}を つかいきった`)}
- if(p.exChoose&&B.hand.length){const x=await chooseHand('つかいきる カードを えらんでください');B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x)}
+ if(p.exRand&&B.hand.length){const x=pick(B.hand);B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x);hint(`${cname(x)}を じょがい した`)}
+ if(p.exChoose&&B.hand.length){const x=await chooseHand('じょがい する カードを えらんでください');B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x)}
 
  // ---- onisoi rare ----
  if(p.fixed&&t0&&!t0.dead){t0.hp=Math.max(0,t0.hp-p.fixed);popE(t0,p.fixed,'#ffe060');addFx('burst',t0.cx,t0.cy);B.flashCol={c:'#fff4a0',t0:now()};B.shakeT=now()+400;sfx('hit');if(t0.hp<=0)kill(t0)}
@@ -3922,9 +3943,9 @@ async function resolveCard(c,tgt,opt){if(B){B.enemies.forEach(o=>o.mocked=false)
  if(p.unload){for(const x of B.hand.filter(x=>CARDS[x.id].t!=='atk'))discardOne(x)}
  if(p.scrape){const before=B.hand.length;drawCards(p.scrape);const drawn=B.hand.slice(before);for(const x of drawn)if(effCost(x)!==0)discardOne(x)}
  renderBattleUI();
- if(p.exhume&&B.exh.length&&B.hand.length<10){const cand=B.exh.filter(x=>x.id!==c.id);if(cand.length){const i=await pickFrom('てふだに もどす つかいきった カードを えらんでください',cand);const x=cand[i];B.exh.splice(B.exh.indexOf(x),1);B.hand.push(x)}}
+ if(p.exhume&&B.exh.length&&B.hand.length<10){const cand=B.exh.filter(x=>x.id!==c.id);if(cand.length){const i=await pickFrom('てふだに もどす じょがい した カードを えらんでください',cand);const x=cand[i];B.exh.splice(B.exh.indexOf(x),1);B.hand.push(x)}}
  if(p.setup&&B.hand.length){const x=await chooseHand('やまふだの うえに おく カードを えらんでください');if(x){B.hand.splice(B.hand.indexOf(x),1);x.free=true;B.draw.push(x)}}
- if(p.exN&&B.hand.length){for(let q=0;q<p.exN&&B.hand.length;q++){const k=await choose(`つかいきる カードを えらびますか？（${q+1}/${p.exN}）`,['えらぶ','おわる']);if(k!==0)break;const x=await chooseHand('つかいきる カードを えらんでください');if(!x)break;B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x);onExhaust();renderBattleUI()}}
+ if(p.exN&&B.hand.length){for(let q=0;q<p.exN&&B.hand.length;q++){const k=await choose(`じょがい する カードを えらびますか？（${q+1}/${p.exN}）`,['えらぶ','おわる']);if(k!==0)break;const x=await chooseHand('じょがい する カードを えらんでください');if(!x)break;B.hand.splice(B.hand.indexOf(x),1);B.exh.push(x);onExhaust();renderBattleUI()}}
  if(p.discovery&&B.hand.length<10){const pool=Object.keys(CARDS).filter(k=>['common','unc','rare'].includes(CARDS[k].g)&&(!p.discAtk||CARDS[k].t==='atk'));const opts=shuffle(pool).slice(0,3).map(id=>tmpCard(id));const i=await pickFrom('てふだに くわえる カードを えらんでください',opts);const x=opts[i];if(!p.discAtk||p.discFree)x.free=true;B.hand.push(x)}
  if((p.secretSkl||p.secretAtk)&&B.hand.length<10){const t=p.secretSkl?'skl':'atk';const cand=B.draw.filter(x=>CARDS[x.id].t===t);if(cand.length){const i=await pickFrom('てふだに くわえる カードを えらんでください',cand);const x=cand[i];B.draw.splice(B.draw.indexOf(x),1);B.hand.push(x)}}
  if(p.omni&&B.draw.length){const i=await pickFrom('2かい つかう カードを えらんでください',B.draw);const x=B.draw.splice(i,1)[0];const tg2=pick(alive());if(tg2){await resolveCard(x,tg2,{x:B.energy,echo:1});if(alive().length)await resolveCard(x,pick(alive()),{x:B.energy,echo:1})}B.exh.push(x)}
@@ -3942,14 +3963,14 @@ async function resolveCard(c,tgt,opt){if(B){B.enemies.forEach(o=>o.mocked=false)
  B.lastType=d.t;
  renderBattleUI();await wait(240);
  if(p.havoc&&alive().length){reshuffle();const top=B.draw.pop();
-  if(top){if(cp(top).unplayable){B.exh.push(top);hint(`${cname(top)}は つかえないので つかいきった`)}else{await wait(200);await resolveCard(top,null,{forceEx:true})}}}}
+  if(top){if(cp(top).unplayable){B.exh.push(top);hint(`${cname(top)}は つかえないので じょがい した`)}else{await wait(200);await resolveCard(top,null,{forceEx:true})}}}}
 
 
 function fleeChance(){const el=FLV[PL.floor]||PL.lv;return Math.max(.1,Math.min(.95,.45+.08*(PL.lv-el)))}
 async function fleeBattle(){if(!B||B.busy||scene!=='battle')return;
  if(B.boss||B.after||B.lose||(B.waves&&B.waves.length)||B.onWave){hint('この たたかいからは にげられない！');sfx('bad');return}
  B.busy=true;B.sel=null;renderBattleUI();showName('にげる');await wait(400);
- if(Math.random()<fleeChance()){sfx('stairs');hint('');B.flashCol={c:'#fcfcfc',t0:now()};await wait(300);await say(`${PL.name}は うまく にげきった！`);PL.hp=B.h.hp;PL.grace=4;FX={type:'in',t0:now(),d:300};toField();return}
+ if(Math.random()<fleeChance()){sfx('stairs');hint('');B.flashCol={c:'#fcfcfc',t0:now()};await wait(300);await say(`${PL.name}は うまく にげきった！`);PL.hp=Math.max(1,Math.min(PL.max,Math.ceil(B.h.hp/hpM())));PL.grace=4;FX={type:'in',t0:now(),d:300};toField();return}
  sfx('bad');showName('にげられなかった！');hint('にげられなかった！ この ターンは うける ダメージが ふえる');B.fleeFail=true;await wait(500);B.busy=false;endTurn();}
 async function battleItems(){if(!B||B.busy||scene!=='battle'||!PL.items.length)return;
  openOv(`<div class="win ovwin"><p class="ovt">アイテム（${PL.items.length}/${maxItems()}）</p><div class="opts">${itemSlotsHTML()}</div><div class="opts"><button class="opt" data-a="close">やめる</button></div></div>`);
@@ -4016,24 +4037,24 @@ async function enemyAct(e){const m=e.intent;showName(m.name);if(m.down){popE(e,'
    renderBattleUI();await wait(hits>6?70:hits>2?160:240);if(B.h.hp<=0)return}
   if(hits>1){B.hitTxt=`${hits}かいヒット！`;B.hitT=now()}}
  if(e.dead)return;
- if(m.block){const v=Math.round(m.block*e.sc);e.block+=v;popE(e,'+'+v,'#7cd8ff');sfx('block')}
+ if(m.block){const v=Math.round(m.block*e.sc*(e.pw||1));e.block+=v;popE(e,'+'+v,'#7cd8ff');sfx('block')}
  if(m.str){const cap=strCap(e),g=Math.max(0,Math.min(strGain(e,m.str),cap-e.str));e.str+=g;popE(e,g?'ちから+'+g:'ちから（じょうげん）','#f8d048')}
  const artB=()=>{if(B.h.art>0){B.h.art--;popH('むこう','#fcfcfc');return true}return false};
- if(m.weak&&!has('ginger')&&!artB()){B.h.weak+=m.weak;popH('よわき','#ffb060')}
- if(m.vuln&&!artB()){B.h.vuln+=m.vuln;popH('むぼうび','#ff7a6a')}
- if(m.poison){B.h.poison+=m.poison;popH('どく'+m.poison,'#cf9cff')}
- if(m.addCard){for(let q=0;q<(m.n||1);q++)B.discard.push(tmpCard(m.addCard));popH(m.addCard==='karifura'?'カリフラーか！':`「${CARDS[m.addCard].name}」×${m.n||1}`,'#f0f0e0');addFx('burst',HX,HY-6,'#f0f0e0')}
- if(m.addHand){for(let q=0;q<(m.n||1)&&B.hand.length<10;q++)B.hand.push(tmpCard(m.addHand));popH(`てふだに「${CARDS[m.addHand].name}」×${m.n||1}`,'#f0f0e0');addFx('burst',HX,HY-6,'#f0f0e0')}
+ if(m.weak&&!has('ginger')&&!has('armak')&&!artB()){B.h.weak+=m.weak;popH('よわき','#ffb060')}
+ if(m.vuln&&!has('armak')&&!artB()){B.h.vuln+=m.vuln;popH('むぼうび','#ff7a6a')}
+ if(m.poison&&!has('armak')){B.h.poison+=m.poison;popH('どく'+m.poison,'#cf9cff')}
+ if(m.addCard&&!has('armak')){for(let q=0;q<(m.n||1);q++)B.discard.push(tmpCard(m.addCard));popH(m.addCard==='karifura'?'カリフラーか！':`「${CARDS[m.addCard].name}」×${m.n||1}`,'#f0f0e0');addFx('burst',HX,HY-6,'#f0f0e0')}
+ if(m.addHand&&!has('armak')){for(let q=0;q<(m.n||1)&&B.hand.length<10;q++)B.hand.push(tmpCard(m.addHand));popH(`てふだに「${CARDS[m.addHand].name}」×${m.n||1}`,'#f0f0e0');addFx('burst',HX,HY-6,'#f0f0e0')}
  if(m.blockAll){for(const o of alive()){const v=Math.round(m.blockAll*o.sc);o.block+=v;popE(o,'+'+v,'#7cd8ff')}sfx('block')}
  if(m.drainE){B.h.nextEnergy-=m.drainE;popH('マナ-'+m.drainE,'#88a0ff')}
- if(m.entangle){if((B.entCD||0)>B.turn)popH('ふりほどいた！','#fcfcfc');else{B.h.entangle=1;B.entCD=B.turn+2;popH('からみついた！','#7cf07c')}}
+ if(m.entangle&&!has('armak')){if((B.entCD||0)>B.turn)popH('ふりほどいた！','#fcfcfc');else{B.h.entangle=1;B.entCD=B.turn+2;popH('からみついた！','#7cf07c')}}
  if(m.healAll){for(const o of alive()){const h=Math.min(m.healAll,o.max-o.hp);if(h){o.hp+=h;popE(o,'+'+h,'#7cf07c')}}}
  if(m.buffAll){for(const o of alive()){const g=Math.max(0,Math.min(m.buffAll,strCap(o)-o.str));o.str+=g;popE(o,'ちから+'+g,'#f8d048')}}
  renderBattleUI();await wait(260);}
 
 async function victory(){if(B&&B.h&&B.h.selfRepair&&!(B.waves&&B.waves.length)){PL.hp=Math.min(PL.max,Math.max(PL.hp,B.h.hp)+B.h.selfRepair);B.h.hp=Math.min(B.h.max,B.h.hp+B.h.selfRepair);B.h.selfRepair=0}if(B.waves&&B.waves.length){const nx=B.waves.shift();const rest=B.waves.reduce((a,w)=>a+w.length,0)+nx.length;B.enemies=nx.map(id=>mkEnemy(id,B.sc));layoutEnemies();if(B.onWave){renderBattleUI();await B.onWave()}else{showName('つぎの むれ');sfx('enc');hint(`つぎの むれが おそいかかってきた！（のこり ${rest}ひき）`)}renderBattleUI();await wait(600);if(B.enemyPhase)return startTurn();B.busy=false;renderBattleUI();return}
  B.busy=true;renderBattleUI();await wait(750);sfx('win');
- B.done=true;PL.hp=B.h.hp;if(has('burnblood'))PL.hp=Math.min(PL.max,PL.hp+6);if(has('blackblood'))PL.hp=Math.min(PL.max,PL.hp+12);const boss=B.enemies.some(e=>e.id==='rainbow'),sc=B.sc;
+ B.done=true;for(const e of B.enemies)if(HIDDEN_BOSS.includes(e.id)&&!B._hbc){PL.flags['bw:'+e.id]=(PL.flags['bw:'+e.id]||0)+1}B._hbc=1;PL.hp=Math.max(1,Math.min(PL.max,Math.ceil(B.h.hp/hpM())));if(has('burnblood'))PL.hp=Math.min(PL.max,PL.hp+6);if(has('blackblood'))PL.hp=Math.min(PL.max,PL.hp+12);const boss=B.enemies.some(e=>e.id==='rainbow'),sc=B.sc;
  if(!B.killed.length){await say('まものは にげて しまった……');PL.grace=3;FX={type:'in',t0:now(),d:300};toField();return}
  const xp=Math.round(B.killed.reduce((s,e)=>s+(e.def.xpLv?Math.round(need(PL.lv)*e.def.xpLv):e.def.xp),0)*sc),dz=Math.round(B.killed.reduce((s,e)=>s+e.def.dz,0)*(sc>1?1.5:1)*(has('sign')?1.2:1));
  const drops=B.killed.filter(e=>Math.random()<e.def.rate);
@@ -4045,6 +4066,7 @@ async function victory(){if(B&&B.h&&B.h.selfRepair&&!(B.waves&&B.waves.length)){
  if(tierNow()>=2&&!B.after&&Math.random()<.3){closeOv();await offerCard({uid:PL.uid++,id:randCard(2),up:false},'まものの もちものから カードを みつけた！')}
  for(const e of B.killed){const d=e.def.item;if(d&&Math.random()<d.rate){closeOv();await gainItem(d.id,`${e.name}が なにかを おとした！`)}}
  for(const e of B.killed)if(e.def.eqGive)await gainEquip(e.def.eqGive,`${e.name}の ${e.def.eqMsg||''}`);
+ for(const e of B.killed){const q=HB_REWARD[e.id];if(!q)continue;const n=hbWins(e.id);if(n>=5&&!owns(q)){closeOv();await gainEquip(q,`${EN[e.id].name}を 5かい うちやぶった！\nきわみの そうびが あらわれた……！`)}else if(n<5)await say(`${EN[e.id].name}を たおした かいすう ${n}／5\n（5かい たおすと なにかが てに はいるらしい……）`)}
  if(B.boss&&!B.enemies.some(e=>e.id==='awanizaru')){PL.hp=PL.max;sfx('heal');await say(`${PL.name}の HPが ぜんかいふく した！`)}
  if(B.after){const f=B.after;return f()}
  let moved=false;if(PL.floor==='BF'){const n=B.killed.filter(e=>e.def.cauli).length;if(n){const s0=stageOf(PL.front||0);PL.front=(PL.front||0)+n;moved=stageOf(PL.front)>s0}}
